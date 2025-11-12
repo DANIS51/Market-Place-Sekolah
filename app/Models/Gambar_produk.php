@@ -10,10 +10,8 @@ class Gambar_produk extends Model
     //
     use HasFactory;
 
-    protected $fillable = [
-        'produk_id',
-        'nama_gambar',
-    ];
+
+    protected  $guarded = [];
 
     public function produk()
     {

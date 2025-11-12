@@ -27,7 +27,7 @@ class AuthController extends Controller
         // Validasi input dari form login
         $credentials = $request->validate([
             'username' => 'required|string', // Username wajib diisi
-            'password' => 'required|string', // Password wajib diisi
+            'password' => 'required|string|min:4', // Password wajib diisi minimal 4 karakter
         ]);
 
         // Cek apakah username & password cocok dengan data di database
@@ -35,8 +35,13 @@ class AuthController extends Controller
             // Jika cocok, buat session baru untuk keamanan
             $request->session()->regenerate();
 
-            // Redirect ke halaman dashboard (atau halaman yang ingin dituju)
-            return redirect()->intended('/dashboard');
+            // Redirect berdasarkan role user
+            $user = Auth::user();
+            if ($user->isAdmin()) {
+                return redirect()->route('dashboard');
+            } else {
+                return redirect()->route('dashboard'); // Member juga ke dashboard, tapi bisa disesuaikan
+            }
         }
 
         // Jika login gagal, kirim pesan error kembali ke halaman login

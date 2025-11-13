@@ -7,14 +7,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
-class AdminMiddleware
+class MemberMiddleware
 {
     public function handle(Request $request, Closure $next): Response
     {
-        if (Auth::check() && Auth::user()->role === 'admin') {
+        if (Auth::check() && Auth::user()->role === 'member') {
             return $next($request);
         }
 
-        return redirect('/'); // arahkan ke beranda jika bukan admin
+        return redirect('/'); // arahkan ke beranda jika bukan member
     }
 }

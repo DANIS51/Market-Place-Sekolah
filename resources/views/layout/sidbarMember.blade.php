@@ -3,14 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sidebar Admin Bootstrap 5</title>
+    <title>Sidebar Member/Admin Bootstrap 5</title>
 
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
 
-    <!-- Custom CSS -->
     <style>
         :root {
             --sidebar-width: 280px;
@@ -426,136 +425,138 @@
         }
     </style>
 </head>
+
 <body>
+<div class="wrapper">
+    <!-- Mobile Overlay -->
+    <div class="mobile-overlay" id="mobileOverlay"></div>
 
-    <div class="wrapper">
-        <!-- Mobile Overlay -->
-        <div class="mobile-overlay" id="mobileOverlay"></div>
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <a href="#" class="logo">
+                <i class="bi bi-layers-fill"></i>
+                <span class="logo-text">AdminPanel</span>
+            </a>
+        </div>
 
-        <!-- Sidebar -->
-        <aside class="sidebar" id="sidebar">
-            <div class="sidebar-header">
-                <a href="#" class="logo">
-                    <i class="bi bi-layers-fill"></i>
-                    <span class="logo-text">AdminPanel</span>
-                </a>
+        <div class="user-profile">
+            <img src="https://i.pravatar.cc/150?img={{ Auth::user()->id % 10 + 1 }}" alt="User Avatar" class="avatar" id="userAvatar">
+            <div class="info">
+                <p class="name">{{ Auth::user()->nama }}</p>
+                <p class="role">{{ Auth::user()->role == 'admin' ? 'Administrator' : 'Member' }}</p>
             </div>
+        </div>
 
-            <div class="user-profile">
-                <img src="https://i.pravatar.cc/150?img={{ Auth::user()->id % 10 + 1 }}" alt="User Avatar" class="avatar" id="userAvatar">
-                <div class="info">
-                    <p class="name">{{ Auth::user()->nama }}</p>
-                    <p class="role">{{ Auth::user()->role == 'admin' ? 'Administrator' : 'Member' }}</p>
-                </div>
+        <nav class="sidebar-nav">
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a href="{{ route('member.dashboard') }}" class="nav-link {{ Route::currentRouteName() == 'member.dashboard' ? 'active' : '' }}" data-tooltip="Dashboard">
+                        <i class="bi bi-speedometer2"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+
+                @if(Auth::user()->isAdmin())
+                <li class="nav-item">
+                    <a href="{{ route('users.index') }}" class="nav-link {{ Route::currentRouteName() == 'users.index' ? 'active' : '' }}" data-tooltip="Pengguna">
+                        <i class="bi bi-people"></i>
+                        <span>Pengguna</span>
+                    </a>
+                </li>
+                @endif
+
+                <li class="nav-item">
+                    <a href="{{ route('produk.index') }}" class="nav-link {{ Route::currentRouteName() == 'produk.index' ? 'active' : '' }}" data-tooltip="Produk">
+                        <i class="bi bi-box-seam"></i>
+                        <span>Produk</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="{{ route('kategori.index') }}" class="nav-link {{ in_array(Route::currentRouteName(), ['kategori.index','kategori.create','kategori.show','kategori.edit']) ? 'active' : '' }}" data-tooltip="Kategori">
+                        <i class="bi bi-tags"></i>
+                        <span>Kategori</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="#" class="nav-link" data-tooltip="Pengaturan">
+                        <i class="bi bi-gear"></i>
+                        <span>Pengaturan</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <form action="{{ route('logout') }}" method="POST" class="d-inline" id="logoutForm">
+                        @csrf
+                        <button type="submit" class="nav-link border-0 bg-transparent w-100 text-start" data-tooltip="Keluar" onclick="return confirm('Apakah Anda yakin ingin keluar?');">
+                            <i class="bi bi-box-arrow-right"></i>
+                            <span>Keluar</span>
+                        </button>
+                    </form>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <!-- Main -->
+    <main class="main" id="main">
+        <div class="topbar">
+            <button class="toggle-sidebar" id="toggleSidebar">
+                <i class="bi bi-list"></i>
+            </button>
+            <div>
+                <!-- Bisa tambahkan search bar, notifikasi, dll di sini -->
             </div>
+        </div>
+        <div class="content">
+            @yield('content.member')
+        </div>
+    </main>
+</div>
 
-            <nav class="sidebar-nav">
-                <ul class="nav flex-column">
-                    <li class="nav-item">
-                        <a href="{{ route('dashboard') }}" class="nav-link {{ Route::currentRouteName() == 'dashboard' ? 'active' : '' }}" data-tooltip="Dashboard">
-                            <i class="bi bi-speedometer2"></i>
-                            <span>Dashboard</span>
-                        </a>
-                    </li>
-                    @if(Auth::user()->isAdmin())
-                    <li class="nav-item">
-                        <a href="{{ route('users.index') }}" class="nav-link {{ Route::currentRouteName() == 'users' ? 'active' : '' }}" data-tooltip="Pengguna">
-                            <i class="bi bi-people"></i>
-                            <span>Pengguna</span>
-                        </a>
-                    </li>
-                    @endif
-                    <li class="nav-item">
-                        <a href="{{ route('toko.index') }}" class="nav-link {{ Route::currentRouteName() == 'toko' ? 'active' : '' }}" data-tooltip="Toko">
-                            <i class="bi bi-shop"></i>
-                            <span>Toko</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="" class="nav-link {{ Route::currentRouteName() == 'pengaturan' ? 'active' : '' }}" data-tooltip="Pengaturan">
-                            <i class="bi bi-gear"></i>
-                            <span>Pengaturan</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <form action="{{ route('logout') }}" method="POST" class="d-inline" id="logoutForm">
-                            @csrf
-                            <button
-                                type="submit"
-                                class="nav-link border-0 bg-transparent w-100 text-start"
-                                data-tooltip="Keluar"
-                                onclick="return confirm('Apakah Anda yakin ingin keluar?');"
-                            >
-                                <i class="bi bi-box-arrow-right"></i>
-                                <span>Keluar</span>
-                            </button>
-                        </form>
-                    </li>
-                </ul>
-            </nav>
-        </aside>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const toggleSidebarBtn = document.getElementById('toggleSidebar');
+    const sidebar = document.getElementById('sidebar');
+    const main = document.getElementById('main');
+    const mobileOverlay = document.getElementById('mobileOverlay');
+    const userAvatar = document.getElementById('userAvatar');
 
-        <!-- Main Content -->
-        <main class="main" id="main">
-            <div class="topbar">
-                <button class="toggle-sidebar" id="toggleSidebar">
-                    <i class="bi bi-list"></i>
-                </button>
-                <div>
-                    <!-- Bisa tambahkan search bar, notifikasi, dll di sini -->
-                </div>
-            </div>
+    // Toggle untuk sidebar di desktop dan mobile
+    toggleSidebarBtn.addEventListener('click', function() {
+        sidebar.classList.toggle('collapsed');
+        main.classList.toggle('expanded');
 
-            <div class="content">
-                @yield('content')
-            </div>
-        </main>
-    </div>
+        // Untuk mobile, toggle class 'show' untuk menampilkan sidebar
+        if (window.innerWidth <= 768) {
+            sidebar.classList.toggle('show');
+            mobileOverlay.classList.toggle('show');
+        }
+    });
 
-    <!-- Bootstrap 5 JS Bundle -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    // Mobile overlay click to close sidebar
+    mobileOverlay.addEventListener('click', function() {
+        sidebar.classList.remove('show');
+        mobileOverlay.classList.remove('show');
+    });
 
-    <!-- Custom JS -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const toggleSidebarBtn = document.getElementById('toggleSidebar');
-            const sidebar = document.getElementById('sidebar');
-            const main = document.getElementById('main');
-            const mobileOverlay = document.getElementById('mobileOverlay');
-            const userAvatar = document.getElementById('userAvatar');
+    // User avatar click to show profile
+    userAvatar.addEventListener('click', function() {
+        // In a real application, this would navigate to user profile page
+        // or show a dropdown with profile options
+        alert('Profil pengguna: ' + document.querySelector('.user-profile .info .name').textContent);
+    });
 
-            // Toggle untuk sidebar di desktop dan mobile
-            toggleSidebarBtn.addEventListener('click', function() {
-                sidebar.classList.toggle('collapsed');
-                main.classList.toggle('expanded');
-
-                // Untuk mobile, toggle class 'show' untuk menampilkan sidebar
-                if (window.innerWidth <= 768) {
-                    sidebar.classList.toggle('show');
-                    mobileOverlay.classList.toggle('show');
-                }
-            });
-
-            // Mobile overlay click to close sidebar
-            mobileOverlay.addEventListener('click', function() {
-                sidebar.classList.remove('show');
-                mobileOverlay.classList.remove('show');
-            });
-
-            // User avatar click to show profile
-            userAvatar.addEventListener('click', function() {
-                // In a real application, this would navigate to the user profile page
-                // or show a dropdown with profile options
-                alert('Profil pengguna: ' + document.querySelector('.user-profile .info .name').textContent);
-            });
-
-            // Handle window resize
-            window.addEventListener('resize', function() {
-                if (window.innerWidth > 768) {
-                    mobileOverlay.classList.remove('show');
-                }
-            });
-        });
-    </script>
+    // Handle window resize
+    window.addEventListener('resize', function() {
+        if (window.innerWidth > 768) {
+            mobileOverlay.classList.remove('show');
+        }
+    });
+});
+</script>
 </body>
 </html>

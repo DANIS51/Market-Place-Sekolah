@@ -11,12 +11,12 @@ class KategoriController extends Controller
     public function index()
     {
         $kategoris = Kategori::withCount('produks')->get();
-        return view('admin.kategori', compact('kategoris'));
+        return view('member.kategori', compact('kategoris'));
     }
 
     public function create()
     {
-        return view('admin.kategori-create');
+        return view('member.kategori-create');
     }
 
     public function store(Request $request)
@@ -41,12 +41,12 @@ class KategoriController extends Controller
     public function show(Kategori $kategori)
     {
         $kategori->load('produks');
-        return view('admin.kategori-show', compact('kategori'));
+        return view('member.kategori-show', compact('kategori'));
     }
 
     public function edit(Kategori $kategori)
     {
-        return view('admin.kategori-edit', compact('kategori'));
+        return view('member.kategori-edit', compact('kategori'));
     }
 
     public function update(Request $request, Kategori $kategori)

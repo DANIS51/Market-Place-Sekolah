@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Kategori;
 use App\Models\Produk;
 use App\Models\Gambar_produk;
+use App\Models\Toko;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Auth as FacadesAuth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
 
@@ -14,14 +18,18 @@ class ProdukController extends Controller
     public function index()
     {
         $produks = Produk::with('kategori', 'toko', 'gambarProduks')->get();
-        return view('admin.produk', compact('produks'));
+
+            return view('member.produk', compact('produks'));
+        
     }
 
     public function create()
     {
-        $kategoris = \App\Models\Kategori::all();
-        $tokos = \App\Models\Toko::all();
-        return view('admin.produk-create', compact('kategoris', 'tokos'));
+        $kategoris = Kategori::all();
+        $tokos = Toko::all();
+
+            return view('member.produk-create', compact('kategoris', 'tokos'));
+
     }
 
     public function store(Request $request)
@@ -70,21 +78,26 @@ class ProdukController extends Controller
             }
         }
 
-        return redirect()->route('produk.index')->with('success', 'Produk berhasil ditambahkan.');
+            return redirect()->route('produk.index')->with('seucces', 'berhasil menambah  produk');
+
     }
 
     public function show($id)
     {
         $produk = Produk::with('kategori', 'toko', 'gambarProduks')->findOrFail($id);
-        return view('admin.produk-show', compact('produk'));
+
+            return view('member.produk-show', compact('produk'));
+
     }
 
     public function edit($id)
     {
         $produk = Produk::with('gambarProduks')->findOrFail($id);
-        $kategoris = \App\Models\Kategori::all();
-        $tokos = \App\Models\Toko::all();
-        return view('admin.produk-edit', compact('produk', 'kategoris', 'tokos'));
+        $kategoris = Kategori::all();
+        $tokos = Toko::all();
+
+            return view('member.produk-edit', compact('produk', 'kategoris', 'tokos'));
+
     }
 
     public function update(Request $request, $id)
@@ -150,7 +163,8 @@ class ProdukController extends Controller
             }
         }
 
-        return redirect()->route('produk.index')->with('success', 'Produk berhasil diperbarui.');
+            return redirect()->route('produk.index')->with('success','Berhasil mengubah data');
+
     }
 
     public function destroy($id)
@@ -167,6 +181,8 @@ class ProdukController extends Controller
 
         // Hapus produk
         $produk->delete();
-        return redirect()->route('produk.index')->with('success', 'Produk berhasil dihapus.');
+
+            return redirect()->route('produk.index')->with('success','Produk berhasil di hapus');
+
     }
 }

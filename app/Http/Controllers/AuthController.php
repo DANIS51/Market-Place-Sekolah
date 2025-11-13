@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-// Import class yang dibutuhkan
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
@@ -15,8 +14,7 @@ class AuthController extends Controller
      */
     public function showLoginForm(): View
     {
-        // Mengembalikan view dari folder resources/views/auth/login.blade.php
-        return view('auth.login');
+        return view('auth.login'); // resources/views/auth/login.blade.php
     }
 
     /**
@@ -26,28 +24,34 @@ class AuthController extends Controller
     {
         // Validasi input dari form login
         $credentials = $request->validate([
-            'username' => 'required|string', // Username wajib diisi
-            'password' => 'required|string|min:4', // Password wajib diisi minimal 4 karakter
+            'username' => 'required|string',
+            'password' => 'required|string|min:4',
         ]);
 
-        // Cek apakah username & password cocok dengan data di database
+        // Cek username & password
         if (Auth::attempt($credentials)) {
-            // Jika cocok, buat session baru untuk keamanan
             $request->session()->regenerate();
 
-            // Redirect berdasarkan role user
             $user = Auth::user();
-            if ($user->isAdmin()) {
+
+            // Redirect berdasarkan role user
+            if ($user->role === 'admin') {
                 return redirect()->route('dashboard');
+            } elseif ($user->role === 'member') {
+                return redirect()->route('member.dashboard');
             } else {
-                return redirect()->route('dashboard'); // Member juga ke dashboard, tapi bisa disesuaikan
+                // Jika role tidak dikenali
+                Auth::logout();
+                return redirect()->route('login')->withErrors([
+                    'username' => 'Role pengguna tidak dikenali.',
+                ]);
             }
         }
 
-        // Jika login gagal, kirim pesan error kembali ke halaman login
+        // Jika login gagal
         return back()->withErrors([
-            'username' => 'Username atau password salah!', // Pesan error
-        ])->onlyInput('username'); // Hanya simpan input username, password dikosongkan
+            'username' => 'Username atau password salah!',
+        ])->onlyInput('username');
     }
 
     /**
@@ -55,16 +59,11 @@ class AuthController extends Controller
      */
     public function logout(Request $request): RedirectResponse
     {
-        // Hapus session login user saat ini
         Auth::logout();
 
-        // Hapus semua data session
         $request->session()->invalidate();
-
-        // Regenerasi token CSRF agar lebih aman
         $request->session()->regenerateToken();
 
-        // Kembali ke halaman login setelah logout
         return redirect()->route('login');
     }
 }

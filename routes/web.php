@@ -15,7 +15,8 @@ use App\Http\Controllers\TokoController;
 |--------------------------------------------------------------------------
 */
 Route::get('/', function () {
-    return view('layout.navbar');
+    $produks = \App\Models\Produk::with('kategori', 'toko', 'gambar_produk')->get();
+    return view('pengguna.home', compact('produks'));
 })->name('home');
 
 /*
@@ -102,13 +103,13 @@ Route::middleware(['auth', 'admin'])->group(function () {
 */
 Route::middleware(['auth', 'member'])->group(function () {
     Route::get('/member/dashboard', function () {
-        $user = Auth::user()->load('toko.produks.gambar_produk');
+        $user = Auth::user();
+        $user->load('toko.produks.gambar_produk');
 
-        // Calculate dynamic statistics
-        $totalProducts = $user->toko ? $user->toko->produks->count() : 0;
-        $totalSales = 0; // Placeholder, as no sales model exists yet
-        $ordersThisMonth = 0; // Placeholder
-        $pendingOrders = 0; // Placeholder
+         $totalProducts = $user->toko ? $user->toko->produks->count() : 0;
+        $totalSales = 0; // ,
+        $ordersThisMonth = 0; //
+        $pendingOrders = 0;
 
         return view('member.dashboard', compact('user', 'totalProducts', 'totalSales', 'ordersThisMonth', 'pendingOrders'));
     })->name('member.dashboard');

@@ -49,9 +49,9 @@
 
                     <div class="mb-3">
                         <h6 class="fw-semibold text-secondary mb-3">Gambar Produk</h6>
-                        @if($produk->gambarProduks->count() > 0)
+                        @if($produk->gambar_produk->count() > 0)
                             <div class="row g-3">
-                                @foreach($produk->gambarProduks as $gambar)
+                                @foreach($produk->gambar_produk as $gambar)
                                     <div class="col-md-3 col-sm-6">
                                         <div class="card border-0 shadow-sm rounded-3 overflow-hidden">
                                             <img src="{{ asset('storage/images/produk/' . $gambar->nama_gambar) }}"

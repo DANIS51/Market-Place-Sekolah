@@ -62,7 +62,7 @@
                         <div class="mb-3">
                             <label class="form-label">Gambar Produk Saat Ini</label>
                             <div class="row" id="existing-images">
-                                @forelse($produk->gambarProduks as $gambar)
+                                @forelse($produk->gambar_produk as $gambar)
                                 <div class="col-md-3 mb-3">
                                     <div class="card">
                                         <img src="{{ asset('storage/images/produk/' . $gambar->nama_gambar) }}" class="card-img-top" alt="Gambar Produk" style="height: 150px; object-fit: cover;">

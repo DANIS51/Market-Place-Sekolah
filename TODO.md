@@ -1,4 +1,3 @@
--   [x] Change relationship in Produk.php from gambarProduks to gambar_produk
--   [x] Update ProdukController to use 'gambar_produk' in with() methods
--   [x] Update routes/web.php for member/dashboard to load data with relationships
--   [x] Update resources/views/member/dashboard.blade.php to use $user and correct nama_gambar field
+-   [x] Modify navbar.blade.php to add menu items Beranda, Produk, Toko, Kategori after search, and adjust layout.
+-   [x] Extract navbar from navbar.blade.php to a partial template.
+-   [x] Update home.blade.php to include navbar partial and keep main content.

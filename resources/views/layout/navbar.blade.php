@@ -15,248 +15,343 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="style.css">
+     <style>
+        :root {
+            --primary-color: #6c757d;
+            --accent-color: #ffc107;
+            --light-bg: #f8f9fa;
+            --border-color: #dee2e6;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #ffffff;
+            color: #333;
+        }
+
+        /* Navbar Styles */
+        .navbar {
+            background-color: #ffffff !important;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            padding: 12px 0;
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: #333 !important;
+            transition: transform 0.3s ease;
+        }
+
+        .navbar-brand:hover {
+            transform: scale(1.05);
+        }
+
+        .navbar-brand i {
+            color: var(--accent-color);
+        }
+
+        .nav-link {
+            font-weight: 500;
+            color: #555 !important;
+            margin: 0 5px;
+            padding: 8px 15px !important;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            background-color: var(--light-bg);
+            color: #333 !important;
+        }
+
+        .nav-link.text-warning {
+            color: var(--accent-color) !important;
+        }
+
+        .input-group {
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            border-radius: 50px;
+            overflow: hidden;
+            background-color: var(--light-bg);
+        }
+
+        .form-control {
+            border: none;
+            background-color: transparent;
+            padding: 10px 20px;
+        }
+
+        .form-control:focus {
+            box-shadow: none;
+            background-color: transparent;
+        }
+
+        .btn-outline-secondary {
+            border: none;
+            background-color: transparent;
+            color: var(--primary-color);
+            transition: all 0.3s ease;
+        }
+
+        .btn-outline-secondary:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .dropdown-menu {
+            border: 1px solid var(--border-color);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            border-radius: 10px;
+        }
+
+        .dropdown-item {
+            border-radius: 8px;
+            margin: 2px 0;
+            transition: all 0.3s ease;
+        }
+
+        .dropdown-item:hover {
+            background-color: var(--light-bg);
+            transform: translateX(5px);
+        }
+
+        /* Content Styles */
+        .content-wrapper {
+            min-height: calc(100vh - 280px);
+            background-color: #ffffff;
+        }
+
+        /* Footer Styles */
+        footer {
+            background-color: #f8f9fa;
+            color: #333;
+            border-top: 1px solid var(--border-color);
+            padding: 50px 0 20px;
+        }
+
+        footer h5 {
+            font-weight: 600;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        footer h5::after {
+            content: '';
+            position: absolute;
+            width: 40px;
+            height: 3px;
+            background-color: var(--accent-color);
+            bottom: 0;
+            left: 0;
+        }
+
+        footer ul {
+            padding: 0;
+            list-style: none;
+        }
+
+        footer ul li {
+            margin-bottom: 10px;
+            transition: transform 0.3s ease;
+        }
+
+        footer ul li:hover {
+            transform: translateX(5px);
+        }
+
+        footer a {
+            color: #666;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        footer a:hover {
+            color: var(--primary-color);
+        }
+
+        .social-icons a {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            background-color: #e9ecef;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 40px;
+            margin-right: 10px;
+            transition: all 0.3s ease;
+            color: #666 !important;
+        }
+
+        .social-icons a:hover {
+            background-color: var(--accent-color);
+            color: white !important;
+            transform: translateY(-3px);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            margin-top: 30px;
+            border-top: 1px solid var(--border-color);
+            color: #666;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .navbar-nav {
+                margin-top: 20px;
+            }
+
+            .form-control {
+                margin-bottom: 10px;
+            }
+        }
+    </style>
 </head>
 <body>
 
     <!-- ==================== NAVBAR ==================== -->
     <header>
-        <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
+        <nav class="navbar navbar-expand-lg navbar-light shadow-sm sticky-top">
             <div class="container">
-                <a class="navbar-brand fw-bold" href="#">
-                    <i class="bi bi-bag-heart-fill text-primary"></i> SekoolMart
+                <a class="navbar-brand fw-bold d-flex align-items-center" href="{{ route('home') }}">
+                    <i class="bi bi-bag-heart-fill text-warning me-2 fs-4"></i>
+                    <span>SekoolMart</span>
                 </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                     <span class="navbar-toggler-icon"></span>
                 </button>
+                <!-- Search Form (Always Visible) -->
+                <form class="d-flex me-3 d-lg-flex flex-grow-1 flex-lg-grow-0" role="search" style="max-width: 300px;">
+                    <div class="input-group">
+                        <input class="form-control border-end-0 rounded-start-pill" type="search" placeholder="Cari produk..." aria-label="Search">
+                        <button class="btn btn-outline-secondary rounded-end-pill px-3" type="submit">
+                            <i class="bi bi-search"></i>
+                        </button>
+                    </div>
+                </form>
+
                 <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav mx-auto">
+                    <!-- Navigation Links -->
+                    <ul class="navbar-nav me-auto">
                         <li class="nav-item">
-                            <form class="d-flex" role="search">
-                                <input class="form-control me-2" type="search" placeholder="Cari buku, seragam, alat tulis..." aria-label="Search">
-                                <button class="btn btn-outline-primary" type="submit"><i class="bi bi-search"></i></button>
-                            </form>
-                        </li>
-                    </ul>
-                    <ul class="navbar-nav">
-                        <li class="nav-item">
-                            <a class="nav-link" href="#"><i class="bi bi-person-circle fs-5"></i> Masuk</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link position-relative" href="#">
-                                <i class="bi bi-cart3 fs-5"></i>
-                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">3</span>
+                            <a class="nav-link fw-medium {{ request()->routeIs('home') ? 'text-warning' : '' }}" href="{{ route('home') }}">
+                                <i class="bi bi-house-door me-1"></i>Beranda
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link fw-medium" href="#produk">
+                                <i class="bi bi-grid me-1"></i>Produk
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link fw-medium" href="#toko">
+                                <i class="bi bi-shop me-1"></i>Toko
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link fw-medium" href="#kategori">
+                                <i class="bi bi-tags me-1"></i>Kategori
+                            </a>
+                        </li>
+                    </ul>
+
+                    <!-- User Actions -->
+                    <ul class="navbar-nav">
+                        @guest
+                        <li class="nav-item">
+                            <a class="nav-link fw-medium" href="{{ route('login') }}">
+                                <i class="bi bi-person-circle me-1"></i>Masuk
+                            </a>
+                        </li>
+                        @else
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle fw-medium d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown">
+                                <div class="bg-light text-primary rounded-circle d-flex align-items-center justify-content-center me-2" style="width: 32px; height: 32px; font-size: 14px;">
+                                    {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
+                                </div>
+                                <span class="d-none d-lg-inline">{{ Auth::user()->name }}</span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end shadow">
+                                @if(Auth::user()->role === 'admin')
+                                <li><a class="dropdown-item" href="{{ route('dashboard') }}"><i class="bi bi-speedometer2 me-2"></i>Dashboard Admin</a></li>
+                                @elseif(Auth::user()->role === 'member')
+                                <li><a class="dropdown-item" href="{{ route('member.dashboard') }}"><i class="bi bi-speedometer2 me-2"></i>Dashboard</a></li>
+                                <li><a class="dropdown-item" href="{{ route('produk.index') }}"><i class="bi bi-box-seam me-2"></i>Kelola Produk</a></li>
+                                @endif
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item text-danger" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                    <i class="bi bi-box-arrow-right me-2"></i>Keluar
+                                </a></li>
+                            </ul>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                @csrf
+                            </form>
+                        </li>
+                        @endguest
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
 
-    <main>
-        <!-- ==================== HERO SECTION ==================== -->
-        <section id="hero" class="bg-primary text-white text-center py-5">
-            <div class="container p-5">
-                <h1 class="display-4 fw-bold">Jual Beli Kebutuhan Sekolah Jadi Lebih Mudah</h1>
-                <p class="lead">Temukan segala perlengkapan sekolah dari buku, seragam, hingga alat tulis dengan harga terbaik.</p>
-                <a href="#featured-products" class="btn btn-light btn-lg mt-3">Mulai Belanja</a>
-            </div>
-        </section>
-
-        <!-- ==================== CATEGORIES ==================== -->
-        <section id="categories" class="py-5">
-            <div class="container">
-                <h2 class="text-center mb-4">Kategori Produk</h2>
-                <div class="row g-3">
-                    <div class="col-6 col-md-3">
-                        <div class="card category-card h-100 text-center p-3 shadow-sm">
-                            <i class="bi bi-book display-4 text-primary"></i>
-                            <div class="card-body">
-                                <h5 class="card-title">Buku & Alat Tulis</h5>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-6 col-md-3">
-                        <div class="card category-card h-100 text-center p-3 shadow-sm">
-                            <i class="bi bi-person-arms-up display-4 text-success"></i>
-                            <div class="card-body">
-                                <h5 class="card-title">Seragam & Atribut</h5>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-6 col-md-3">
-                        <div class="card category-card h-100 text-center p-3 shadow-sm">
-                            <i class="bi bi-trophy display-4 text-warning"></i>
-                            <div class="card-body">
-                                <h5 class="card-title">Kebutuhan Pramuka</h5>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-6 col-md-3">
-                        <div class="card category-card h-100 text-center p-3 shadow-sm">
-                            <i class="bi bi-music-note-beamed display-4 text-danger"></i>
-                            <div class="card-body">
-                                <h5 class="card-title">Alat Musik & Olahraga</h5>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- ==================== FEATURED PRODUCTS ==================== -->
-        <section id="featured-products" class="py-5 bg-light">
-            <div class="container">
-                <h2 class="text-center mb-4">Produk Unggulan</h2>
-                <div class="row g-4">
-                    <!-- Produk 1 -->
-                    <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-                        <div class="card h-100 product-card shadow-sm">
-                            <img src="https://via.placeholder.com/300x250?text=Gambar+Produk" class="card-img-top" alt="Produk 1">
-                            <div class="card-body d-flex flex-column">
-                                <h5 class="card-title">Paket Alat Tulis SD</h5>
-                                <p class="card-text text-muted flex-grow-1">Lengkap untuk tahun ajaran baru.</p>
-                                <p class="price fw-bold">Rp 55.000</p>
-                                <a href="#" class="btn btn-primary mt-auto">Tambah ke Keranjang</a>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Produk 2 -->
-                    <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-                        <div class="card h-100 product-card shadow-sm">
-                            <img src="https://via.placeholder.com/300x250?text=Gambar+Produk" class="card-img-top" alt="Produk 2">
-                            <div class="card-body d-flex flex-column">
-                                <h5 class="card-title">Seragam SMP Putra</h5>
-                                <p class="card-text text-muted flex-grow-1">Bahan adem dan nyaman dipakai.</p>
-                                <p class="price fw-bold">Rp 120.000</p>
-                                <a href="#" class="btn btn-primary mt-auto">Tambah ke Keranjang</a>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Produk 3 -->
-                    <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-                        <div class="card h-100 product-card shadow-sm">
-                            <img src="https://placehold.co/300x250/EFEFEFF/333333?text=Gambar+Produk" class="card-img-top" alt="Produk 3">
-                            <div class="card-body d-flex flex-column">
-                                <h5 class="card-title">Buku Pelajaran Matematika Kelas 7</h5>
-                                <p class="card-text text-muted flex-grow-1">Edisi revisi terbaru K13.</p>
-                                <p class="price fw-bold">Rp 85.000</p>
-                                <a href="#" class="btn btn-primary mt-auto">Tambah ke Keranjang</a>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Produk 4 -->
-                    <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-                        <div class="card h-100 product-card shadow-sm">
-                            <img src="https://placehold.co/300x250/EFEFEFF/333333?text=Gambar+Produk" class="card-img-top" alt="Produk 4">
-                            <div class="card-body d-flex flex-column">
-                                <h5 class="card-title">Tas Ransel Anak Karakter</h5>
-                                <p class="card-text text-muted flex-grow-1">Motif lucu, kuat, dan tahan air.</p>
-                                <p class="price fw-bold">Rp 150.000</p>
-                                <a href="#" class="btn btn-primary mt-auto">Tambah ke Keranjang</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- ==================== HOW IT WORKS ==================== -->
-        <section id="how-it-works" class="py-5">
-            <div class="container">
-                <h2 class="text-center mb-5">Bagaimana Cara Kerjanya?</h2>
-                <div class="row text-center g-4">
-                    <div class="col-md-4">
-                        <i class="bi bi-search display-1 text-primary"></i>
-                        <h4 class="mt-3">1. Cari Barang</h4>
-                        <p>Gunakan fitur pencarian atau jelajahi kategori untuk menemukan produk yang Anda butuhkan.</p>
-                    </div>
-                    <div class="col-md-4">
-                        <i class="bi bi-credit-card display-1 text-success"></i>
-                        <h4 class="mt-3">2. Bayar Aman</h4>
-                        <p>Pilih produk dan lakukan pembayaran dengan aman melalui berbagai metode pembayaran.</p>
-                    </div>
-                    <div class="col-md-4">
-                        <i class="bi bi-truck display-1 text-warning"></i>
-                        <h4 class="mt-3">3. Barang Dikirim</h4>
-                        <p>Penjual akan segera memproses dan mengirimkan barang pesanan Anda.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-         <section id="testimonials" class="py-5 bg-light">
-            <div class="container">
-                <h2 class="text-center mb-4">Apa Kata Mereka?</h2>
-                <div class="row g-4">
-                    <div class="col-md-4">
-                        <div class="card h-100 shadow-sm">
-                            <div class="card-body">
-                                <p class="card-text">"Harganya lebih murah dibanding toko lain dan pengirimannya cepat. Sangat membantu untuk persiapan sekolah anak!"</p>
-                                <footer class="blockquote-footer mb-0">Ibu Sarah, <cite title="Source Title">Orang Tua Siswa</cite></footer>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="card h-100 shadow-sm">
-                            <div class="card-body">
-                                <p class="card-text">"Akhirnya ada marketplace khusus kebutuhan sekolah. Jadi gampang cari buku dan alat tulis tanpa harus keliling kota."</p>
-                                <footer class="blockquote-footer mb-0">Rizki, <cite title="Source Title">Siswa SMA</cite></footer>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="card h-100 shadow-sm">
-                            <div class="card-body">
-                                <p class="card-text">"Platform yang bagus untuk para penjual di lingkungan sekolah. Mudah digunakan dan banyak pembelinya."</p>
-                                <footer class="blockquote-footer mb-0">Pak Budi, <cite title="Source Title">Penjual</cite></footer>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
+    <div class="content-wrapper">
+        @yield('conten-pengguna')
+    </div>
 
     <!-- ==================== FOOTER ==================== -->
-    <footer class="bg-dark text-white pt-5 pb-3">
+    <footer class="pt-5 pb-3">
         <div class="container">
             <div class="row">
                 <div class="col-md-4 mb-4">
-                    <h5><i class="bi bi-bag-heart-fill"></i> SekoolMart</h5>
+                    <h5><i class="bi bi-bag-heart-fill text-warning"></i> SekoolMart</h5>
                     <p>Marketplace terpercaya untuk memenuhi semua kebutuhan sekolah Anda dengan mudah, cepat, dan aman.</p>
+                    <div class="social-icons mt-3">
+                        <a href="#"><i class="bi bi-facebook"></i></a>
+                        <a href="#"><i class="bi bi-instagram"></i></a>
+                        <a href="#"><i class="bi bi-twitter"></i></a>
+                        <a href="#"><i class="bi bi-whatsapp"></i></a>
+                    </div>
                 </div>
                 <div class="col-md-2 mb-4">
                     <h6>Layanan</h6>
                     <ul class="list-unstyled">
-                        <li><a href="#" class="text-white-50">Cara Belanja</a></li>
-                        <li><a href="#" class="text-white-50">Cara Jual</a></li>
-                        <li><a href="#" class="text-white-50">Pembayaran</a></li>
+                        <li><a href="#">Cara Belanja</a></li>
+                        <li><a href="#">Cara Jual</a></li>
+                        <li><a href="#">Pembayaran</a></li>
+                        <li><a href="#">Pengiriman</a></li>
                     </ul>
                 </div>
                 <div class="col-md-2 mb-4">
                     <h6>Bantuan</h6>
                     <ul class="list-unstyled">
-                        <li><a href="#" class="text-white-50">FAQ</a></li>
-                        <li><a href="#" class="text-white-50">Hubungi Kami</a></li>
-                        <li><a href="#" class="text-white-50">Kebijakan Privasi</a></li>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Hubungi Kami</a></li>
+                        <li><a href="#">Kebijakan Privasi</a></li>
+                        <li><a href="#">Syarat & Ketentuan</a></li>
                     </ul>
                 </div>
                 <div class="col-md-4 mb-4">
-                    <h6>Ikuti Kami</h6>
-                    <a href="#" class="text-white me-3 fs-4"><i class="bi bi-facebook"></i></a>
-                    <a href="#" class="text-white me-3 fs-4"><i class="bi bi-instagram"></i></a>
-                    <a href="#" class="text-white fs-4"><i class="bi bi-twitter"></i></a>
+                    <h6>Download Aplikasi</h6>
+                    <p>Dapatkan pengalaman belanja yang lebih baik dengan aplikasi mobile kami</p>
+                    <div class="d-flex gap-2 mt-3">
+                        <a href="#" class="btn btn-outline-secondary d-flex align-items-center">
+                            <i class="bi bi-google-play me-2"></i> Google Play
+                        </a>
+                        <a href="#" class="btn btn-outline-secondary d-flex align-items-center">
+                            <i class="bi bi-apple me-2"></i> App Store
+                        </a>
+                    </div>
                 </div>
             </div>
-            <hr class="bg-white-50">
+            <hr>
             <div class="text-center">
                 <p class="mb-0">&copy; 2024 SekoolMart. All Rights Reserved.</p>
             </div>
         </div>
     </footer>
-
     <!-- Bootstrap JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>

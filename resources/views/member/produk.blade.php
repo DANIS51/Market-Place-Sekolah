@@ -79,10 +79,10 @@
                                     </td>
                                     <td>{{ $produk->toko->nama_toko ?? '-' }}</td>
                                     <td>
-                                        @if($produk->gambarProduks && $produk->gambarProduks->count() > 0)
+                                        @if($produk->gambar_produk && $produk->gambar_produk->count() > 0)
                                             <div class="d-flex align-items-center">
-                                                <img src="{{ asset('storage/images/produk/' . $produk->gambarProduks->first()->nama_gambar) }}" alt="Gambar Produk" class="rounded border me-2 product-img" style="width: 40px; height: 40px; object-fit: cover;">
-                                                <small class="text-muted">{{ $produk->gambarProduks->count() }} gambar</small>
+                                                <img src="{{ asset('storage/images/produk/' . $produk->gambar_produk->first()->nama_gambar) }}" alt="Gambar Produk" class="rounded border me-2 product-img" style="width: 40px; height: 40px; object-fit: cover;">
+                                                <small class="text-muted">{{ $produk->gambar_produk->count() }} gambar</small>
                                             </div>
                                         @else
                                             <small class="text-muted text-secondary">

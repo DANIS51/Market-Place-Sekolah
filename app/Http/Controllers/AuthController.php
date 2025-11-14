@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
+use App\Models\User;
 
 class AuthController extends Controller
 {
@@ -30,9 +32,17 @@ class AuthController extends Controller
 
         // Cek username & password
         if (Auth::attempt($credentials)) {
-            $request->session()->regenerate();
-
             $user = Auth::user();
+
+            // Cek status user
+            if ($user->status !== 'approved') {
+                Auth::logout();
+                return redirect()->route('login')->withErrors([
+                    'username' => 'Akun Anda belum disetujui oleh admin. Silakan tunggu konfirmasi.',
+                ]);
+            }
+
+            $request->session()->regenerate();
 
             // Redirect berdasarkan role user
             if ($user->role === 'admin') {
@@ -52,6 +62,41 @@ class AuthController extends Controller
         return back()->withErrors([
             'username' => 'Username atau password salah!',
         ])->onlyInput('username');
+    }
+
+    /**
+     * Menampilkan halaman form register
+     */
+    public function showRegisterForm(): View
+    {
+        return view('auth.register'); // resources/views/auth/register.blade.php
+    }
+
+    /**
+     * Proses register user
+     */
+    public function register(Request $request): RedirectResponse
+    {
+        // Validasi input dari form register
+        $validated = $request->validate([
+            'nama' => 'required|string|max:255',
+            'kontak' => 'required|string|max:13',
+            'username' => 'required|string|max:255|unique:users',
+            'password' => 'required|string|min:4',
+        ]);
+
+        // Buat user baru dengan role member dan status pending
+        User::create([
+            'nama' => $validated['nama'],
+            'kontak' => $validated['kontak'],
+            'username' => $validated['username'],
+            'password' => Hash::make($validated['password']),
+            'role' => 'member',
+            'status' => 'pending',
+        ]);
+
+        // Redirect ke login dengan pesan sukses
+        return redirect()->route('login')->with('success', 'Akun berhasil dibuat! Silakan login.');
     }
 
     /**

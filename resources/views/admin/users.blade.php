@@ -43,6 +43,7 @@
                                     <th>Kontak</th>
                                     <th>Username</th>
                                     <th class="text-center" style="width: 120px;">Role</th>
+                                    <th class="text-center" style="width: 120px;">Status</th>
                                     <th class="text-center" style="width: 180px;">Aksi</th>
                                 </tr>
                             </thead>
@@ -82,6 +83,21 @@
                                         @endif
                                     </td>
                                     <td class="text-center">
+                                        @if($user->status == 'pending')
+                                            <span class="badge rounded-pill bg-warning text-dark px-3 py-2 d-inline-flex align-items-center">
+                                                <i class="bi bi-clock me-1"></i> Pending
+                                            </span>
+                                        @elseif($user->status == 'approved')
+                                            <span class="badge rounded-pill bg-success text-light px-3 py-2 d-inline-flex align-items-center">
+                                                <i class="bi bi-check-circle me-1"></i> Disetujui
+                                            </span>
+                                        @else
+                                            <span class="badge rounded-pill bg-danger text-light px-3 py-2 d-inline-flex align-items-center">
+                                                <i class="bi bi-x-circle me-1"></i> Ditolak
+                                            </span>
+                                        @endif
+                                    </td>
+                                    <td class="text-center">
                                         <div class="d-flex justify-content-center gap-2">
                                             <div class="btn-group" role="group">
                                                 <button type="button" class="btn btn-sm btn-outline-primary action-btn" title="Lihat Detail" onclick="window.location='{{ route('users.show', $user) }}'">
@@ -90,20 +106,37 @@
                                                 <button type="button" class="btn btn-sm btn-outline-warning action-btn" title="Edit Pengguna" onclick="window.location='{{ route('users.edit', $user) }}'">
                                                     <i class="bi bi-pencil"></i>
                                                 </button>
-                                                <form action="{{ route('users.destroy', $user) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus pengguna ini?')">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="btn btn-sm btn-outline-danger action-btn" title="Hapus Pengguna">
-                                                        <i class="bi bi-trash3"></i>
-                                                    </button>
-                                                </form>
+                                                @if($user->status == 'pending')
+                                                    <form action="{{ route('users.approve', $user) }}" method="POST" class="d-inline">
+                                                        @csrf
+                                                        @method('PATCH')
+                                                        <button type="submit" class="btn btn-sm btn-outline-success action-btn" title="Setujui Pengguna">
+                                                            <i class="bi bi-check-circle"></i>
+                                                        </button>
+                                                    </form>
+                                                    <form action="{{ route('users.reject', $user) }}" method="POST" class="d-inline">
+                                                        @csrf
+                                                        @method('PATCH')
+                                                        <button type="submit" class="btn btn-sm btn-outline-danger action-btn" title="Tolak Pengguna">
+                                                            <i class="bi bi-x-circle"></i>
+                                                        </button>
+                                                    </form>
+                                                @else
+                                                    <form action="{{ route('users.destroy', $user) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus pengguna ini?')" class="d-inline">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="btn btn-sm btn-outline-danger action-btn" title="Hapus Pengguna">
+                                                            <i class="bi bi-trash3"></i>
+                                                        </button>
+                                                    </form>
+                                                @endif
                                             </div>
                                         </div>
                                     </td>
                                 </tr>
                                 @empty
                                 <tr>
-                                    <td colspan="6" class="text-center py-5 text-muted">
+                                    <td colspan="7" class="text-center py-5 text-muted">
                                         <div class="py-4">
                                             <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
                                                 <i class="bi bi-people fs-1 text-muted"></i>

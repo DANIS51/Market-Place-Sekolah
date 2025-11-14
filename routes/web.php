@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProdukController;
@@ -14,7 +15,7 @@ use App\Http\Controllers\TokoController;
 |--------------------------------------------------------------------------
 */
 Route::get('/', function () {
-    return view('welcome');
+    return view('layout.navbar');
 })->name('home');
 
 /*
@@ -25,6 +26,8 @@ Route::get('/', function () {
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
     Route::post('/login', [AuthController::class, 'login'])->name('login.process');
+    Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
+    Route::post('/register', [AuthController::class, 'register'])->name('register.process');
 });
 
 Route::post('/logout', [AuthController::class, 'logout'])
@@ -37,7 +40,20 @@ Route::post('/logout', [AuthController::class, 'logout'])
 |--------------------------------------------------------------------------
 */
 Route::get('/dashboard', function () {
-    return view('layout.sidbar');
+    if (Auth::user()->role === 'admin') {
+        $stats = [
+            'totalUsers' => \App\Models\User::count(),
+            'totalStores' => \App\Models\Toko::count(),
+            'totalProducts' => \App\Models\Produk::count(),
+            'totalCategories' => \App\Models\Kategori::count(),
+        ];
+        $recentUsers = \App\Models\User::latest()->take(5)->get();
+        return view('admin.dashboard', compact('stats', 'recentUsers'));
+    } elseif (Auth::user()->role === 'member') {
+        return redirect()->route('member.dashboard');
+    } else {
+        return view('layout.sidbar');
+    }
 })->middleware('auth')->name('dashboard');
 
 Route::get('/navbar', function () {
@@ -59,8 +75,10 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
     Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
     Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
+    Route::patch('/users/{user}/approve', [UserController::class, 'approve'])->name('users.approve');
+    Route::patch('/users/{user}/reject', [UserController::class, 'reject'])->name('users.reject');
 
-    
+
 
     // ---------- Toko ----------
     Route::get('/toko', [TokoController::class, 'index'])->name('toko.index');
@@ -84,7 +102,15 @@ Route::middleware(['auth', 'admin'])->group(function () {
 */
 Route::middleware(['auth', 'member'])->group(function () {
     Route::get('/member/dashboard', function () {
-        return view('member.dashboard');
+        $user = Auth::user()->load('toko.produks.gambar_produk');
+
+        // Calculate dynamic statistics
+        $totalProducts = $user->toko ? $user->toko->produks->count() : 0;
+        $totalSales = 0; // Placeholder, as no sales model exists yet
+        $ordersThisMonth = 0; // Placeholder
+        $pendingOrders = 0; // Placeholder
+
+        return view('member.dashboard', compact('user', 'totalProducts', 'totalSales', 'ordersThisMonth', 'pendingOrders'));
     })->name('member.dashboard');
 
 

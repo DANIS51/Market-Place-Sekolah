@@ -441,9 +441,13 @@
         </div>
 
         <div class="user-profile">
-            <img src="https://i.pravatar.cc/150?img={{ Auth::user()->id % 10 + 1 }}" alt="User Avatar" class="avatar" id="userAvatar">
+            @if(Auth::user()->toko && Auth::user()->toko->gambar)
+                <img src="{{ asset(Auth::user()->toko->gambar) }}" alt="Toko Avatar" class="avatar" id="userAvatar">
+            @else
+                <img src="https://i.pravatar.cc/150?img={{ Auth::user()->id % 10 + 1 }}" alt="User Avatar" class="avatar" id="userAvatar">
+            @endif
             <div class="info">
-                <p class="name">{{ Auth::user()->nama }}</p>
+                <p class="name">{{ Auth::user()->toko ? Auth::user()->toko->nama_toko : Auth::user()->nama }}</p>
                 <p class="role">{{ Auth::user()->role == 'admin' ? 'Administrator' : 'Member' }}</p>
             </div>
         </div>

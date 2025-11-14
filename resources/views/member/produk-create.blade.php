@@ -35,36 +35,19 @@
                             </div>
                         </div>
 
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="kategori_id" class="form-label fw-medium">Kategori <span class="text-danger">*</span></label>
-                                <select class="form-select rounded-3 @error('kategori_id') is-invalid @enderror" id="kategori_id" name="kategori_id" required>
-                                    <option value="">Pilih Kategori</option>
-                                    @foreach($kategoris as $kategori)
-                                        <option value="{{ $kategori->id }}" {{ old('kategori_id') == $kategori->id ? 'selected' : '' }}>
-                                            {{ $kategori->nama_kategori }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                                @error('kategori_id')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-
-                            <div class="col-md-6 mb-3">
-                                <label for="toko_id" class="form-label fw-medium">Toko <span class="text-danger">*</span></label>
-                                <select class="form-select rounded-3 @error('toko_id') is-invalid @enderror" id="toko_id" name="toko_id" required>
-                                    <option value="">Pilih Toko</option>
-                                    @foreach($tokos as $toko)
-                                        <option value="{{ $toko->id }}" {{ old('toko_id') == $toko->id ? 'selected' : '' }}>
-                                            {{ $toko->nama_toko }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                                @error('toko_id')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
+                        <div class="mb-3">
+                            <label for="kategori_id" class="form-label fw-medium">Kategori <span class="text-danger">*</span></label>
+                            <select class="form-select rounded-3 @error('kategori_id') is-invalid @enderror" id="kategori_id" name="kategori_id" required>
+                                <option value="">Pilih Kategori</option>
+                                @foreach($kategoris as $kategori)
+                                    <option value="{{ $kategori->id }}" {{ old('kategori_id') == $kategori->id ? 'selected' : '' }}>
+                                        {{ $kategori->nama_kategori }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @error('kategori_id')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
 
                         <div class="mb-3">

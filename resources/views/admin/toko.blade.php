@@ -53,7 +53,8 @@
                                     <th>Nama Toko</th>
                                     <th>Pemilik</th>
                                     <th>Kontak</th>
-                                    <th>Jumlah Produk</th>
+                                    <th>Alamat</th>
+                                    <th>Deskripsi</th>
                                     <th class="text-center" style="width: 180px;">Aksi</th>
                                 </tr>
                             </thead>
@@ -100,7 +101,12 @@
                                     </td>
                                     <td>
                                         <span class="badge rounded-pill bg-primary text-white px-3 py-2 d-inline-flex align-items-center">
-                                            <i class="bi bi-box-seam me-1"></i> {{ $toko->produks_count }} Produk
+                                            <i class="bi bi-geo-alt me-1"></i> {{ $toko->alamat }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span>
+                                            <i class="bi bi-text-paragraph bg bg-info me-2"></i>{{ $toko->deskripsi }}
                                         </span>
                                     </td>
                                     <td class="text-center">

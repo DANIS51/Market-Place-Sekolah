@@ -17,18 +17,22 @@ class ProdukController extends Controller
     //
     public function index()
     {
-        $produks = Produk::with('kategori', 'toko', 'gambarProduks')->get();
+        $produks = Produk::with('kategori', 'toko', 'gambar_produk')->get();
 
             return view('member.produk', compact('produks'));
-        
+
     }
 
     public function create()
     {
         $kategoris = Kategori::all();
-        $tokos = Toko::all();
 
-            return view('member.produk-create', compact('kategoris', 'tokos'));
+        // Cek apakah user memiliki toko
+        if (!Auth::user()->toko) {
+            return redirect()->route('produk.index')->with('error', 'Anda belum memiliki toko. Silakan hubungi admin untuk membuat toko terlebih dahulu.');
+        }
+
+            return view('member.produk-create', compact('kategoris'));
 
     }
 
@@ -41,7 +45,6 @@ class ProdukController extends Controller
             'harga' => 'required|numeric',
             'deskripsi' => 'required|string|min:10',
             'tanggal_upload' => 'required|date',
-            'toko_id' => 'required|exists:tokos,id',
             'gambar_produk.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
@@ -58,7 +61,7 @@ class ProdukController extends Controller
             'harga' => $request->harga,
             'deskripsi' => $request->deskripsi,
             'tanggal_upload' => $request->tanggal_upload,
-            'toko_id' => $request->toko_id,
+            'toko_id' => Auth::user()->toko->id,
         ]);
 
         // Handle multiple image uploads
@@ -84,7 +87,7 @@ class ProdukController extends Controller
 
     public function show($id)
     {
-        $produk = Produk::with('kategori', 'toko', 'gambarProduks')->findOrFail($id);
+        $produk = Produk::with('kategori', 'toko', 'gambar_produk')->findOrFail($id);
 
             return view('member.produk-show', compact('produk'));
 
@@ -92,11 +95,10 @@ class ProdukController extends Controller
 
     public function edit($id)
     {
-        $produk = Produk::with('gambarProduks')->findOrFail($id);
+        $produk = Produk::with('gambar_produk')->findOrFail($id);
         $kategoris = Kategori::all();
-        $tokos = Toko::all();
 
-            return view('member.produk-edit', compact('produk', 'kategoris', 'tokos'));
+            return view('member.produk-edit', compact('produk', 'kategoris'));
 
     }
 
@@ -110,7 +112,6 @@ class ProdukController extends Controller
             'harga' => 'required|numeric',
             'deskripsi' => 'required|string|min:10',
             'tanggal_upload' => 'required|date',
-            'toko_id' => 'required|exists:tokos,id',
             'gambar_produk' => 'nullable|array',
             'gambar_produk.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
             'delete_images' => 'nullable|array',
@@ -130,7 +131,7 @@ class ProdukController extends Controller
             'harga' => $request->harga,
             'deskripsi' => $request->deskripsi,
             'tanggal_upload' => $request->tanggal_upload,
-            'toko_id' => $request->toko_id,
+            'toko_id' => Auth::user()->toko->id,
         ]);
 
         // Handle image deletions
@@ -169,10 +170,10 @@ class ProdukController extends Controller
 
     public function destroy($id)
     {
-        $produk = Produk::with('gambarProduks')->findOrFail($id);
+        $produk = Produk::with('gambar_produk')->findOrFail($id);
 
         // Delete associated images
-        foreach ($produk->gambarProduks as $gambar) {
+        foreach ($produk->gambar_produk as $gambar) {
             // Hapus file dari storage
             Storage::disk('public')->delete('images/produk/' . $gambar->nama_gambar);
             // Hapus record dari database

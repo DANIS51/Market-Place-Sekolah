@@ -44,7 +44,7 @@ class UserController extends Controller
             'role' => $request->role,
         ]);
 
-        return redirect()->route('users')->with('success', 'Pengguna berhasil ditambahkan.');
+        return redirect()->route('users.index')->with('success', 'Pengguna berhasil ditambahkan.');
     }
 
     public function show(User $user)
@@ -81,12 +81,24 @@ class UserController extends Controller
             'role' => $request->role,
         ]);
 
-        return redirect()->route('users')->with('success', 'Pengguna berhasil diperbarui.');
+        return redirect()->route('users.index')->with('success', 'Pengguna berhasil diperbarui.');
     }
 
     public function destroy(User $user)
     {
         $user->delete();
-        return redirect()->route('users')->with('success', 'Pengguna berhasil dihapus.');
+        return redirect()->route('users.index')->with('success', 'Pengguna berhasil dihapus.');
+    }
+
+    public function approve(User $user)
+    {
+        $user->update(['status' => 'approved']);
+        return redirect()->route('users.index')->with('success', 'Pengguna berhasil disetujui.');
+    }
+
+    public function reject(User $user)
+    {
+        $user->update(['status' => 'rejected']);
+        return redirect()->route('users.index')->with('success', 'Pengguna berhasil ditolak.');
     }
 }

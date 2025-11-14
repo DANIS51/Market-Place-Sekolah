@@ -28,7 +28,7 @@ class Produk extends Model
         return $this->belongsTo(Kategori::class);
     }
 
-    public function gambarProduks()
+    public function gambar_produk()
     {
         return $this->hasMany(Gambar_produk::class);
     }

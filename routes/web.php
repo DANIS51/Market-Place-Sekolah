@@ -7,6 +7,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProdukController;
 use App\Http\Controllers\GambarController;
 use App\Http\Controllers\KategoriController;
+use App\Http\Controllers\PenggunaController;
 use App\Http\Controllers\TokoController;
 
 /*
@@ -15,9 +16,24 @@ use App\Http\Controllers\TokoController;
 |--------------------------------------------------------------------------
 */
 Route::get('/', function () {
-    $produks = \App\Models\Produk::with('kategori', 'toko', 'gambar_produk')->get();
-    return view('pengguna.home', compact('produks'));
+    $produks = \App\Models\Produk::with('kategori', 'toko', 'gambar_produk')->paginate(12);
+    $kategoris = \App\Models\Kategori::withCount('produks')->take(8)->get();
+    $tokos = \App\Models\Toko::with('user')->withCount('produks')->take(8)->get();
+    return view('pengguna.home', compact('produks', 'kategoris', 'tokos'));
 })->name('home');
+
+/*
+|--------------------------------------------------------------------------
+| Route Pengguna Umum
+|--------------------------------------------------------------------------
+*/
+
+Route::get('/pengguna/produk',[PenggunaController::class, 'index'])->name('show.produk.index');
+Route::get('/pengguna/produk/{produk}',[PenggunaController::class, 'produkShow'])->name('pengguna.produk.show');
+Route::get('/pengguna/kategori',[PenggunaController::class, 'kategori'])->name('pengguna.kategori');
+Route::get('/pengguna/kategori/{kategori}',[PenggunaController::class, 'kategoriShow'])->name('pengguna.kategori.show');
+Route::get('/pengguna/toko',[PenggunaController::class, 'toko'])->name('pengguna.toko');
+Route::get('/pengguna/toko/{toko}',[PenggunaController::class, 'tokoShow'])->name('pengguna.toko.show');
 
 /*
 |--------------------------------------------------------------------------
@@ -34,32 +50,6 @@ Route::middleware('guest')->group(function () {
 Route::post('/logout', [AuthController::class, 'logout'])
     ->middleware('auth')
     ->name('logout');
-
-/*
-|--------------------------------------------------------------------------
-| DASHBOARD UTAMA
-|--------------------------------------------------------------------------
-*/
-Route::get('/dashboard', function () {
-    if (Auth::user()->role === 'admin') {
-        $stats = [
-            'totalUsers' => \App\Models\User::count(),
-            'totalStores' => \App\Models\Toko::count(),
-            'totalProducts' => \App\Models\Produk::count(),
-            'totalCategories' => \App\Models\Kategori::count(),
-        ];
-        $recentUsers = \App\Models\User::latest()->take(5)->get();
-        return view('admin.dashboard', compact('stats', 'recentUsers'));
-    } elseif (Auth::user()->role === 'member') {
-        return redirect()->route('member.dashboard');
-    } else {
-        return view('layout.sidbar');
-    }
-})->middleware('auth')->name('dashboard');
-
-Route::get('/navbar', function () {
-    return view('layout.navbar');
-})->middleware('auth')->name('navbar');
 
 /*
 |--------------------------------------------------------------------------

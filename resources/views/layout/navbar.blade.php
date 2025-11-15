@@ -216,22 +216,11 @@
     <header>
         <nav class="navbar navbar-expand-lg navbar-light shadow-sm sticky-top">
             <div class="container">
-                <a class="navbar-brand fw-bold d-flex align-items-center" href="{{ route('home') }}">
+                <a class="navbar-brand fw-bold d-flex align-items-center" href="index.html">
                     <i class="bi bi-bag-heart-fill text-warning me-2 fs-4"></i>
                     <span>SekoolMart</span>
                 </a>
-                <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <!-- Search Form (Always Visible) -->
-                <form class="d-flex me-3 d-lg-flex flex-grow-1 flex-lg-grow-0" role="search" style="max-width: 300px;">
-                    <div class="input-group">
-                        <input class="form-control border-end-0 rounded-start-pill" type="search" placeholder="Cari produk..." aria-label="Search">
-                        <button class="btn btn-outline-secondary rounded-end-pill px-3" type="submit">
-                            <i class="bi bi-search"></i>
-                        </button>
-                    </div>
-                </form>
+             
 
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <!-- Navigation Links -->
@@ -242,67 +231,36 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link fw-medium" href="#produk">
+                            <a class="nav-link fw-medium {{ request()->routeIs('show.produk.index') ? 'text-warning' : '' }}" href="{{ route('show.produk.index') }}">
                                 <i class="bi bi-grid me-1"></i>Produk
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link fw-medium" href="#toko">
+                            <a class="nav-link fw-medium {{ request()->routeIs('pengguna.toko') ? 'text-warning' : '' }}" href="{{ route('pengguna.toko') }}">
                                 <i class="bi bi-shop me-1"></i>Toko
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link fw-medium" href="#kategori">
+                            <a class="nav-link fw-medium {{ request()->routeIs('pengguna.kategori') ? 'text-warning' : '' }}" href="{{ route('pengguna.kategori') }}">
                                 <i class="bi bi-tags me-1"></i>Kategori
                             </a>
                         </li>
                     </ul>
 
                     <!-- User Actions -->
-                    <ul class="navbar-nav">
-                        @guest
-                        <li class="nav-item">
-                            <a class="nav-link fw-medium" href="{{ route('login') }}">
-                                <i class="bi bi-person-circle me-1"></i>Masuk
-                            </a>
-                        </li>
-                        @else
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle fw-medium d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown">
-                                <div class="bg-light text-primary rounded-circle d-flex align-items-center justify-content-center me-2" style="width: 32px; height: 32px; font-size: 14px;">
-                                    {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
-                                </div>
-                                <span class="d-none d-lg-inline">{{ Auth::user()->name }}</span>
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-end shadow">
-                                @if(Auth::user()->role === 'admin')
-                                <li><a class="dropdown-item" href="{{ route('dashboard') }}"><i class="bi bi-speedometer2 me-2"></i>Dashboard Admin</a></li>
-                                @elseif(Auth::user()->role === 'member')
-                                <li><a class="dropdown-item" href="{{ route('member.dashboard') }}"><i class="bi bi-speedometer2 me-2"></i>Dashboard</a></li>
-                                <li><a class="dropdown-item" href="{{ route('produk.index') }}"><i class="bi bi-box-seam me-2"></i>Kelola Produk</a></li>
-                                @endif
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item text-danger" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                    <i class="bi bi-box-arrow-right me-2"></i>Keluar
-                                </a></li>
-                            </ul>
-                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                @csrf
-                            </form>
-                        </li>
-                        @endguest
-                    </ul>
+                    <a href="{{ route('login') }}" class="btn btn-outline-warning ms-3">Masuk</a>
                 </div>
             </div>
         </nav>
     </header>
 
+
     <div class="content-wrapper">
+        <!-- Content will be loaded here -->
         @yield('conten-pengguna')
     </div>
 
-    <!-- ==================== FOOTER ==================== -->
-    <footer class="pt-5 pb-3">
+     <footer class="pt-5 pb-3">
         <div class="container">
             <div class="row">
                 <div class="col-md-4 mb-4">

@@ -29,7 +29,7 @@ class GambarController extends Controller
         if ($request->hasFile('gambar')) {
             $file = $request->file('gambar');
             $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
-            $path = $file->storeAs('images/produk', $filename, 'public');
+            $file->move(public_path('images/produk'), $filename);
 
             Gambar_produk::create([
                 'produk_id' => $request->produk_id,

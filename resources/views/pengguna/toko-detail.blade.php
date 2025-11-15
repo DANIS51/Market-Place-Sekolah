@@ -3,35 +3,78 @@
 @section('conten-pengguna')
 <div class="container py-4">
 
-    <!-- // Judul Marketplace -->
-    <div class="text-center mb-5">
-        <h1 class="display-5 fw-bold mb-3">Marketplace Sekolah</h1>
-        <p class="lead text-muted">Temukan produk berkualitas dari berbagai toko di sekolah kami</p>
+    <!-- Header Toko -->
+    <div class="card border-0 shadow-sm mb-4">
+        <div class="card-body">
+            <div class="row align-items-center">
+                <div class="col-md-3 text-center">
+                    @if($toko->gambar)
+                        <img src="{{ asset($toko->gambar) }}"
+                             class="rounded-circle img-fluid"
+                             alt="{{ $toko->nama_toko }}"
+                             style="width: 120px; height: 120px; object-fit: cover;">
+                    @else
+                        <div class="bg-light rounded-circle d-flex align-items-center justify-content-center mx-auto"
+                             style="width: 120px; height: 120px;">
+                            <i class="bi bi-shop text-muted fs-1"></i>
+                        </div>
+                    @endif
+                </div>
+                <div class="col-md-9">
+                    <h2 class="fw-bold mb-2">{{ $toko->nama_toko }}</h2>
+                    <p class="text-muted mb-3">{{ $toko->deskripsi }}</p>
+
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="d-flex align-items-center">
+                                <i class="bi bi-telephone text-primary me-2"></i>
+                                <small>{{ $toko->kontak_toko }}</small>
+                            </div>
+                        </div>
+                        <div class="col-sm-8">
+                            <div class="d-flex align-items-center">
+                                <i class="bi bi-geo-alt text-primary me-2"></i>
+                                <small>{{ $toko->alamat }}</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-3">
+                        <span class="badge bg-primary fs-6">
+                            <i class="bi bi-box-seam me-1"></i>{{ $toko->produks->count() }} Produk
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <!-- // Grid Produk -->
+    <!-- Produk Toko -->
+    <div class="row">
+        <div class="col-12">
+            <h4 class="fw-bold mb-4">Produk dari {{ $toko->nama_toko }}</h4>
+        </div>
+    </div>
+
     <div class="row g-4">
-        @forelse($produks as $produk)
+        @forelse($toko->produks as $produk)
         <div class="col-lg-3 col-md-4 col-sm-6">
             <div class="card h-100 border-0 shadow-sm rounded-3 overflow-hidden product-card">
 
-                <!-- // Container gambar produk -->
+                <!-- Container gambar produk -->
                 <div class="position-relative product-image-container">
 
                     @if($produk->gambar_produk && $produk->gambar_produk->count() > 0)
-                        <!-- Jika produk punya gambar di database -->
-                        <img src="{{ asset('images/produk/' . $produk->gambar_produk->first()->nama_gambar) }}"
+                        <img src="{{ asset('storage/images/produk/' . $produk->gambar_produk->first()->nama_gambar) }}"
                              class="card-img-top product-image"
-                             alt="{{ $produk->nama_produk }}"
-                             style="width: 100%; height: 250px; object-fit: cover;">
+                             alt="{{ $produk->nama_produk }}">
                     @else
-                        <!-- Jika produk tidak punya gambar, tampilkan kotak kosong tinggi fix -->
-                        <div class="no-image d-flex align-items-center justify-content-center bg-light" style="height: 250px;">
-                            <i class="bi bi-image text-muted fs-1"></i>
+                        <div class="no-image d-flex align-items-center justify-content-center bg-light">
+                            <i class="bi bi-image text-muted"></i>
                         </div>
                     @endif
 
-                    <!-- // Jika gambar lebih dari 1, tampilkan jumlahnya -->
+                    <!-- Jika gambar lebih dari 1, tampilkan jumlahnya -->
                     @if($produk->gambar_produk && $produk->gambar_produk->count() > 1)
                     <div class="image-count">
                         <small class="text-white">
@@ -40,7 +83,7 @@
                     </div>
                     @endif
 
-                    <!-- // Tombol aksi (like/share) muncul saat hover -->
+                    <!-- Tombol aksi (like/share) muncul saat hover -->
                     <div class="product-actions">
                         <button class="btn btn-sm btn-light rounded-circle me-1">
                             <i class="bi bi-heart"></i>
@@ -51,47 +94,42 @@
                     </div>
                 </div>
 
-                <!-- // Bagian detail card -->
+                <!-- Bagian detail card -->
                 <div class="card-body d-flex flex-column">
 
-                    <!-- // Kategori produk -->
+                    <!-- Kategori produk -->
                     <div class="mb-2">
                         <span class="badge bg-light text-dark">
                             {{ $produk->kategori->nama_kategori ?? 'Umum' }}
                         </span>
                     </div>
 
-                    <!-- // Nama Produk -->
+                    <!-- Nama Produk -->
                     <h6 class="card-title fw-bold mb-2">{{ $produk->nama_produk }}</h6>
 
-                    <!-- // Deskripsi singkat -->
+                    <!-- Deskripsi singkat -->
                     <p class="card-text text-muted small mb-3 flex-grow-1">
                         {{ Str::limit($produk->deskripsi, 60) }}
                     </p>
 
-                    <!-- // Harga + Nama toko -->
+                    <!-- Harga -->
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <span class="h5 text-success fw-bold mb-0">
                             Rp {{ number_format($produk->harga, 0, ',', '.') }}
                         </span>
 
-                        <div class="text-end">
-                            <small class="text-muted d-block">
-                                {{ $produk->toko->nama_toko ?? 'Toko' }}
-                            </small>
-
-                            <!-- // Rating static -->
-                            <div class="text-warning small">
-                                <i class="bi bi-star-fill"></i> 4.5
-                            </div>
+                        <!-- Rating static -->
+                        <div class="text-warning small">
+                            <i class="bi bi-star-fill"></i> 4.5
                         </div>
                     </div>
 
                     <!-- Tombol lihat detail -->
                     <div class="d-grid gap-2">
-                        <a href="{{ route('pengguna.produk.show', Crypt::encrypt($produk->id)) }}" class="btn btn-primary rounded-pill">
+                        <button class="btn btn-primary rounded-pill"
+                                onclick="viewProduct({{ $produk->id }})">
                             <i class="bi bi-eye me-1"></i> Lihat Detail
-                        </a>
+                        </button>
                     </div>
                 </div>
 
@@ -99,24 +137,24 @@
         </div>
 
         @empty
-        <!-- // Jika tidak ada produk -->
+        <!-- Jika toko tidak punya produk -->
         <div class="col-12 text-center py-5">
             <i class="bi bi-inbox text-muted" style="font-size: 4rem;"></i>
-            <h4 class="text-muted mt-3">Belum ada produk tersedia</h4>
-            <p class="text-muted">Produk akan segera ditambahkan oleh penjual.</p>
+            <h4 class="text-muted mt-3">Belum ada produk di toko ini</h4>
+            <p class="text-muted">Produk akan segera ditambahkan oleh pemilik toko.</p>
         </div>
         @endforelse
     </div>
 
-    <!-- // Pagination -->
-    @if(isset($produks) && method_exists($produks, 'links'))
-    <div class="d-flex justify-content-center mt-5">
-        {{ $produks->links() }}
+    <!-- Tombol kembali -->
+    <div class="text-center mt-5">
+        <a href="{{ route('pengguna.toko') }}" class="btn btn-outline-primary rounded-pill">
+            <i class="bi bi-arrow-left me-2"></i>Kembali ke Daftar Toko
+        </a>
     </div>
-    @endif
 </div>
 
-<!-- // Modal detail produk -->
+<!-- Modal detail produk -->
 <div class="modal fade" id="productModal" tabindex="-1">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content rounded-4 border-0">
@@ -125,7 +163,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body" id="productDetail">
-                <!-- // Detail produk dimuat via AJAX -->
+                <!-- Detail produk dimuat via AJAX -->
             </div>
         </div>
     </div>
@@ -134,13 +172,13 @@
 @push('styles')
 <style>
 
-    /* // Style card agar naik saat hover */
+    /* Style card agar naik saat hover */
     .product-card {
         transition: all 0.3s ease;
         height: 100%;
         display: flex;
         flex-direction: column;
-        min-height: 480px; /* // Tinggi minimum yang lebih konsisten */
+        min-height: 480px;
     }
 
     .product-card:hover {
@@ -148,24 +186,22 @@
         box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
     }
 
-    /* Container gambar dengan tinggi tetap */
+    /* Container gambar dengan tinggi fix */
     .product-image-container {
-        position: relative;
-        width: 100%;
-        height: 250px; /* Tinggi tetap untuk konsistensi */
+        height: 240px;
         overflow: hidden;
         background: #f8f9fa;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
-    /* Gambar utama mengisi container penuh */
+    /* Gambar utama fix height supaya sejajar */
     .product-image {
-        position: absolute;
-        top: 0;
-        left: 0;
         width: 100%;
-        height: 100%;
-        object-fit: cover;        /* Potong gambar supaya proporsional */
-        object-position: center;  /* Fokus tengah */
+        height: 240px !important;
+        object-fit: cover;
+        object-position: center;
         transition: transform 0.5s ease;
     }
 
@@ -176,21 +212,15 @@
 
     /* Box untuk produk tanpa gambar */
     .no-image {
-        position: absolute;
-        top: 0;
-        left: 0;
+        height: 240px;
         width: 100%;
-        height: 100%;
-        display: flex;
-        align-items-center;
-        justify-content-center;
     }
 
     .no-image i {
         font-size: 3rem;
     }
 
-    /* // Badge jumlah gambar */
+    /* Badge jumlah gambar */
     .image-count {
         position: absolute;
         top: 10px;
@@ -201,7 +231,7 @@
         font-size: 0.75rem;
     }
 
-    /* // Tombol aksi muncul saat hover */
+    /* Tombol aksi muncul saat hover */
     .product-actions {
         position: absolute;
         top: 10px;
@@ -212,19 +242,6 @@
 
     .product-card:hover .product-actions {
         opacity: 1;
-    }
-
-    /* // Style pagination */
-    .pagination .page-link {
-        border-radius: 8px;
-        margin: 0 2px;
-        border: 1px solid #dee2e6;
-        color: #0d6efd;
-    }
-
-    .pagination .page-item.active .page-link {
-        background-color: #0d6efd;
-        border-color: #0d6efd;
     }
 
 </style>

@@ -1,6 +1,6 @@
-@extends('layout.sidbarMember')
+@extends('layout.sidbar')
 
-@section('content.member')
+@section('content')
 <div class="container-fluid py-5" style="background: #f7f8fa; min-height: 100vh;">
     <div class="row justify-content-center">
         <div class="col-lg-7 col-md-9">
@@ -43,7 +43,7 @@
                         </div>
 
                         <!-- Pilih Ikon -->
-                     
+
 
                         <!-- Preview -->
                         <div class="mb-4">

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Crypt;
 
 class UserController extends Controller
 {
@@ -47,18 +48,37 @@ class UserController extends Controller
         return redirect()->route('users.index')->with('success', 'Pengguna berhasil ditambahkan.');
     }
 
-    public function show(User $user)
+    public function show($id)
     {
-        return view('admin.users-show', compact('user'));
+        try {
+            $real_id = Crypt::decrypt($id);
+            $user = User::findOrFail($real_id);
+            return view('admin.users-show', compact('user'));
+        } catch (\Exception $e) {
+            abort(404);
+        }
     }
 
-    public function edit(User $user)
+    public function edit($id)
     {
-        return view('admin.users-edit', compact('user'));
+        try {
+            $real_id = Crypt::decrypt($id);
+            $user = User::findOrFail($real_id);
+            return view('admin.users-edit', compact('user'));
+        } catch (\Exception $e) {
+            abort(404);
+        }
     }
 
-    public function update(Request $request, User $user)
+    public function update(Request $request, $id)
     {
+        try {
+            $real_id = Crypt::decrypt($id);
+            $user = User::findOrFail($real_id);
+        } catch (\Exception $e) {
+            abort(404);
+        }
+
         $validator = Validator::make($request->all(), [
             'nama' => 'required|string|max:255',
             'kontak' => 'required|string|max:255',
@@ -84,20 +104,41 @@ class UserController extends Controller
         return redirect()->route('users.index')->with('success', 'Pengguna berhasil diperbarui.');
     }
 
-    public function destroy(User $user)
+    public function destroy($id)
     {
+        try {
+            $real_id = Crypt::decrypt($id);
+            $user = User::findOrFail($real_id);
+        } catch (\Exception $e) {
+            abort(404);
+        }
+
         $user->delete();
         return redirect()->route('users.index')->with('success', 'Pengguna berhasil dihapus.');
     }
 
-    public function approve(User $user)
+    public function approve($id)
     {
+        try {
+            $real_id = Crypt::decrypt($id);
+            $user = User::findOrFail($real_id);
+        } catch (\Exception $e) {
+            abort(404);
+        }
+
         $user->update(['status' => 'approved']);
         return redirect()->route('users.index')->with('success', 'Pengguna berhasil disetujui.');
     }
 
-    public function reject(User $user)
+    public function reject($id)
     {
+        try {
+            $real_id = Crypt::decrypt($id);
+            $user = User::findOrFail($real_id);
+        } catch (\Exception $e) {
+            abort(404);
+        }
+
         $user->update(['status' => 'rejected']);
         return redirect()->route('users.index')->with('success', 'Pengguna berhasil ditolak.');
     }

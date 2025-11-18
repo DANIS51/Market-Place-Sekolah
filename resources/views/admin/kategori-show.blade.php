@@ -1,5 +1,5 @@
-@extends('layout.sidbarMember')
-@section('content.member')
+@extends('layout.sidbar')
+@section('content')
 <div class="container-fluid">
     <!-- Judul Halaman -->
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
@@ -22,7 +22,7 @@
                             <h5 class="card-title mb-0 fw-bold">Informasi Kategori</h5>
                         </div>
                         <div class="col-auto">
-                            <a href="{{ route('kategori.edit', $kategori) }}" class="btn btn-primary btn-sm">
+                            <a href="{{ route('kategori.edit', Crypt::encrypt($kategori->id)) }}" class="btn btn-primary btn-sm">
                                 <i class="bi bi-pencil me-1"></i> Edit Kategori
                             </a>
                         </div>

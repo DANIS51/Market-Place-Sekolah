@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Toko;
 use App\Models\User;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Crypt;
 
 class TokoController extends Controller
 {
@@ -52,20 +53,39 @@ class TokoController extends Controller
         return redirect()->route('toko.index')->with('success', 'Toko berhasil ditambahkan.');
     }
 
-    public function show(Toko $toko)
+    public function show($id)
     {
-        $toko->load('user', 'produks');
-        return view('admin.toko-show', compact('toko'));
+        try {
+            $real_id = Crypt::decrypt($id);
+            $toko = Toko::findOrFail($real_id);
+            $toko->load('user', 'produks');
+            return view('admin.toko-show', compact('toko'));
+        } catch (\Exception $e) {
+            abort(404);
+        }
     }
 
-    public function edit(Toko $toko)
+    public function edit($id)
     {
-        $users = User::all();
-        return view('admin.toko-edit', compact('toko', 'users'));
+        try {
+            $real_id = Crypt::decrypt($id);
+            $toko = Toko::findOrFail($real_id);
+            $users = User::all();
+            return view('admin.toko-edit', compact('toko', 'users'));
+        } catch (\Exception $e) {
+            abort(404);
+        }
     }
 
-    public function update(Request $request, Toko $toko)
+    public function update(Request $request, $id)
     {
+        try {
+            $real_id = Crypt::decrypt($id);
+            $toko = Toko::findOrFail($real_id);
+        } catch (\Exception $e) {
+            abort(404);
+        }
+
         $validator = Validator::make($request->all(), [
             'nama_toko' => 'required|string|max:255',
             'deskripsi' => 'nullable|string',
@@ -100,8 +120,15 @@ class TokoController extends Controller
         return redirect()->route('toko.index')->with('success', 'Toko berhasil diperbarui.');
     }
 
-    public function destroy(Toko $toko)
+    public function destroy($id)
     {
+        try {
+            $real_id = Crypt::decrypt($id);
+            $toko = Toko::findOrFail($real_id);
+        } catch (\Exception $e) {
+            abort(404);
+        }
+
         // Check if toko has related produks
         if ($toko->produks()->count() > 0) {
             return redirect()->back()->with('error', 'Toko tidak dapat dihapus karena masih memiliki produk terkait.');

@@ -10,6 +10,23 @@ use App\Models\Toko;
 
 class PenggunaController extends Controller
 {
+    public function home(Request $request)
+    {
+        $query = Produk::with('kategori', 'toko', 'gambar_produk');
+
+        // Filter berdasarkan search (case-insensitive)
+        if ($request->has('search') && !empty($request->search)) {
+            $searchTerm = strtolower($request->search);
+            $query->whereRaw('LOWER(nama_produk) LIKE ?', ['%' . $searchTerm . '%']);
+        }
+
+        $produks = $query->paginate(12);
+        $kategoris = Kategori::withCount('produks')->take(8)->get();
+        $tokos = Toko::with('user')->withCount('produks')->take(8)->get();
+
+        return view('pengguna.home', compact('produks', 'kategoris', 'tokos'));
+    }
+
     public function index(Request $request)
     {
         $query = Produk::with('kategori', 'toko', 'gambar_produk');
@@ -85,7 +102,7 @@ class PenggunaController extends Controller
         $produks = Produk::with('kategori', 'toko', 'gambar_produk')
                         ->where('toko_id', $tokoId)
                         ->paginate(12);
-        return view('pengguna.toko.show', compact('toko', 'produks'));
+        return view('pengguna.toko-show', compact('toko', 'produks'));
     }
 
     public function produkShow($produkId)

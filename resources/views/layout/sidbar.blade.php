@@ -472,6 +472,12 @@
                         </a>
                     </li>
                     <li class="nav-item">
+                        <a href="{{ route('kategori.index') }}" class="nav-link {{ in_array(Route::currentRouteName(), ['kategori.index','kategori.create','kategori.show','kategori.edit']) ? 'active' : '' }}" data-tooltip="Kategori">
+                            <i class="bi bi-tags"></i>
+                            <span>Kategori</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a href="" class="nav-link {{ Route::currentRouteName() == 'pengaturan' ? 'active' : '' }}" data-tooltip="Pengaturan">
                             <i class="bi bi-gear"></i>
                             <span>Pengaturan</span>

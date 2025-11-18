@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #FFFFFFFF 0%, #C9FF05FF 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -33,7 +33,7 @@
         .logo {
             width: 60px;
             height: 60px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #FFFFFFFF 0%, #E9FF25FF 100%);
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -77,7 +77,7 @@
         }
 
         .btn-login {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #FFFFFFFF 0%, #DDFF19FF 100%);
             border: none;
             border-radius: 8px;
             padding: 0.75rem;
@@ -143,6 +143,10 @@
 </head>
 <body>
     <div class="login-card">
+        <div class="" >
+            <a href="{{ route('home') }}"><i class="fa fa-arrow-left"></i></a>
+
+        </div>
         <div class="logo-section">
             <div class="logo">
                 <i class="fas fa-graduation-cap"></i>

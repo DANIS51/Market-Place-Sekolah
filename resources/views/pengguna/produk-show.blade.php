@@ -6,15 +6,15 @@
     <!-- Detail Produk -->
     <div class="row g-4">
         <!-- Gambar Produk -->
-        <div class="col-lg-6">
+        <div class="col-lg-5">
             <div class="card border-0 shadow-sm">
                 <div class="card-body p-0">
                     @if($produk->gambar_produk && $produk->gambar_produk->count() > 0)
                         <div class="product-gallery">
                             <!-- Gambar utama -->
                             <div class="main-image-container">
-                                <img src="{{ asset('images/produk/' . $produk->gambar_produk->first()->nama_gambar) }}"
-                                     class="main-image img-fluid rounded"
+                                <img src="{{ asset('storage/images/produk/' . $produk->gambar_produk->first()->nama_gambar) }}"
+                                     class="main-image"
                                      alt="{{ $produk->nama_produk }}"
                                      id="mainImage">
                             </div>
@@ -25,10 +25,10 @@
                                 <div class="row g-2">
                                     @foreach($produk->gambar_produk as $gambar)
                                     <div class="col-3">
-                                        <img src="{{ asset('images/produk/' . $gambar->nama_gambar) }}"
-                                             class="thumbnail img-fluid rounded cursor-pointer"
+                                        <img src="{{ asset('storage/images/produk/' . $gambar->nama_gambar) }}"
+                                             class="thumbnail"
                                              alt="Thumbnail"
-                                             onclick="changeImage('{{ asset('images/produk/' . $gambar->nama_gambar) }}')">
+                                             onclick="changeImage('{{ asset('storage/images/produk/' . $gambar->nama_gambar) }}')">
                                     </div>
                                     @endforeach
                                 </div>
@@ -36,8 +36,10 @@
                             @endif
                         </div>
                     @else
-                        <div class="no-image d-flex align-items-center justify-content-center bg-light rounded" style="height: 400px;">
-                            <i class="bi bi-image text-muted fs-1"></i>
+                        <div class="no-image-container">
+                            <div class="no-image d-flex align-items-center justify-content-center bg-light">
+                                <i class="bi bi-image text-muted fs-1"></i>
+                            </div>
                         </div>
                     @endif
                 </div>
@@ -45,7 +47,7 @@
         </div>
 
         <!-- Informasi Produk -->
-        <div class="col-lg-6">
+        <div class="col-lg-7">
             <div class="card border-0 shadow-sm">
                 <div class="card-body">
 
@@ -126,45 +128,69 @@
         position: relative;
     }
 
+    /* Container untuk gambar utama dengan dimensi tetap */
     .main-image-container {
-        position: relative;
         width: 100%;
-        height: 400px;
+        height: 400px; /* Tinggi tetap untuk gambar utama */
+        overflow: hidden;
+        background: #f8f9fa;
+        border-radius: 8px;
+        position: relative;
+    }
+
+    /* Gambar utama mengisi container penuh */
+    .main-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover; /* Memastikan gambar memenuhi container tanpa distorsi */
+        object-position: center; /* Fokus pada tengah gambar */
+        display: block;
+        transition: transform 0.3s ease;
+    }
+
+    /* Container untuk placeholder gambar kosong */
+    .no-image-container {
+        width: 100%;
+        height: 400px; /* Sama dengan tinggi gambar utama */
         overflow: hidden;
         background: #f8f9fa;
         border-radius: 8px;
     }
 
-    .main-image {
-        position: absolute;
-        top: 0;
-        left: 0;
+    .no-image {
         width: 100%;
         height: 100%;
-        object-fit: cover;
-        object-position: center;
-        transition: transform 0.3s ease;
+    }
+
+    /* Styling untuk thumbnail */
+    .thumbnail-container {
+        width: 100%;
     }
 
     .thumbnail {
         width: 100%;
-        height: 80px;
-        object-fit: cover;
+        height: 80px; /* Tinggi tetap untuk thumbnail */
+        object-fit: cover; /* Memastikan thumbnail proporsional */
         cursor: pointer;
         border: 2px solid transparent;
-        transition: border-color 0.3s ease;
+        border-radius: 8px;
+        transition: all 0.3s ease;
     }
 
     .thumbnail:hover {
         border-color: #0d6efd;
+        transform: scale(1.05);
     }
 
-    .cursor-pointer {
-        cursor: pointer;
-    }
+    /* Responsive untuk ukuran gambar */
+    @media (max-width: 768px) {
+        .main-image-container {
+            height: 300px; /* Tinggi lebih kecil untuk mobile */
+        }
 
-    .no-image {
-        height: 400px;
+        .no-image-container {
+            height: 300px;
+        }
     }
 </style>
 @endpush

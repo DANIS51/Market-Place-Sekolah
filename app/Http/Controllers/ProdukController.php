@@ -11,13 +11,16 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Auth as FacadesAuth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Crypt;
 
 class ProdukController extends Controller
 {
     //
     public function index()
     {
-        $produks = Produk::with('kategori', 'toko', 'gambar_produk')->get();
+        $produks = Produk::whereHas('toko', function($query) {
+            $query->where('user_id', Auth::id());
+        })->with('kategori', 'toko', 'gambar_produk')->get();
 
             return view('member.produk', compact('produks'));
 
@@ -25,7 +28,7 @@ class ProdukController extends Controller
 
     public function create()
     {
-        $kategoris = Kategori::all();
+        $kategoris = Kategori::where('user_id', Auth::id())->get();
 
         // Cek apakah user memiliki toko
         if (!Auth::user()->toko) {
@@ -87,7 +90,15 @@ class ProdukController extends Controller
 
     public function show($id)
     {
-        $produk = Produk::with('kategori', 'toko', 'gambar_produk')->findOrFail($id);
+        try {
+            $real_id = Crypt::decrypt($id);
+        } catch (\Exception $e) {
+            abort(404);
+        }
+
+        $produk = Produk::whereHas('toko', function($query) {
+            $query->where('user_id', Auth::id());
+        })->with('kategori', 'toko', 'gambar_produk')->findOrFail($real_id);
 
             return view('member.produk-show', compact('produk'));
 
@@ -95,8 +106,16 @@ class ProdukController extends Controller
 
     public function edit($id)
     {
-        $produk = Produk::with('gambar_produk')->findOrFail($id);
-        $kategoris = Kategori::all();
+        try {
+            $real_id = Crypt::decrypt($id);
+        } catch (\Exception $e) {
+            abort(404);
+        }
+
+        $produk = Produk::whereHas('toko', function($query) {
+            $query->where('user_id', Auth::id());
+        })->with('gambar_produk')->findOrFail($real_id);
+        $kategoris = Kategori::where('user_id', Auth::id())->get();
 
             return view('member.produk-edit', compact('produk', 'kategoris'));
 
@@ -104,10 +123,18 @@ class ProdukController extends Controller
 
     public function update(Request $request, $id)
     {
-        $produk = Produk::findOrFail($id);
+        try {
+            $real_id = Crypt::decrypt($id);
+        } catch (\Exception $e) {
+            abort(404);
+        }
+
+        $produk = Produk::whereHas('toko', function($query) {
+            $query->where('user_id', Auth::id());
+        })->findOrFail($real_id);
 
         $validate = Validator::make($request->all(),[
-            'kategori_id' => 'required|exists:kategoris,id',
+            'kategori_id' => 'required|exists:kategoris,id,user_id,' . Auth::id(),
             'nama_produk' => 'required|string|max:250|min:3',
             'harga' => 'required|numeric',
             'deskripsi' => 'required|string|min:10',
@@ -170,7 +197,15 @@ class ProdukController extends Controller
 
     public function destroy($id)
     {
-        $produk = Produk::with('gambar_produk')->findOrFail($id);
+        try {
+            $real_id = Crypt::decrypt($id);
+        } catch (\Exception $e) {
+            abort(404);
+        }
+
+        $produk = Produk::whereHas('toko', function($query) {
+            $query->where('user_id', Auth::id());
+        })->with('gambar_produk')->findOrFail($real_id);
 
         // Delete associated images
         foreach ($produk->gambar_produk as $gambar) {

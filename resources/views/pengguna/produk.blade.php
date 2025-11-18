@@ -1,13 +1,13 @@
 @extends('layout.navbar')
 
 @section('conten-pengguna')
+<!-- Judul Halaman -->
+<div class="container-fluid text-center mb-5 hero-section" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;padding: 70px;">
+    <h1 class="display-5 fw-bold mb-3">Semua Produk</h1>
+    <p class="lead mb-4">Temukan produk berkualitas dari berbagai toko di sekolah kami</p>
+</div>
 <div class="container py-4">
 
-    <!-- Judul Halaman -->
-    <div class="text-center mb-5">
-        <h1 class="display-5 fw-bold mb-3">Semua Produk</h1>
-        <p class="lead text-muted">Temukan produk berkualitas dari berbagai toko di sekolah kami</p>
-    </div>
 
     <!-- Filter Section -->
     <div class="card border-0 shadow-sm mb-4">
@@ -56,27 +56,50 @@
 
                 <!-- Container gambar produk -->
                 <div class="position-relative product-image-container">
-
                     @if($produk->gambar_produk && $produk->gambar_produk->count() > 0)
-                        <!-- Jika produk punya gambar di database -->
-                        <img src="{{ asset('storage/images/produk/' . $produk->gambar_produk->first()->nama_gambar) }}"
-                             class="card-img-top product-image"
-                             alt="{{ $produk->nama_produk }}"
-                             style="width: 100%; height: 250px; object-fit: cover;">
+                        @if($produk->gambar_produk->count() > 1)
+                            <!-- Carousel untuk produk dengan banyak gambar -->
+                            <div id="carousel-{{ $produk->id }}" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="3000">
+                                <div class="carousel-inner rounded-top">
+                                    @foreach($produk->gambar_produk as $index => $gambar)
+                                    <div class="carousel-item {{ $index == 0 ? 'active' : '' }}">
+                                        <img src="{{ asset('storage/images/produk/' . $gambar->nama_gambar) }}"
+                                             class="d-block w-100 product-image"
+                                             alt="{{ $produk->nama_produk }} - Gambar {{ $index + 1 }}"
+                                             style="height: 250px; object-fit: cover;">
+                                    </div>
+                                    @endforeach
+                                </div>
+
+                                <!-- Controls -->
+                                <button class="carousel-control-prev" type="button" data-bs-target="#carousel-{{ $produk->id }}" data-bs-slide="prev">
+                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Previous</span>
+                                </button>
+                                <button class="carousel-control-next" type="button" data-bs-target="#carousel-{{ $produk->id }}" data-bs-slide="next">
+                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Next</span>
+                                </button>
+
+                                <!-- Indicators -->
+                                <div class="carousel-indicators position-absolute bottom-0 mb-2">
+                                    @foreach($produk->gambar_produk as $index => $gambar)
+                                    <button type="button" data-bs-target="#carousel-{{ $produk->id }}" data-bs-slide-to="{{ $index }}" class="{{ $index == 0 ? 'active' : '' }}" aria-current="{{ $index == 0 ? 'true' : 'false' }}" aria-label="Slide {{ $index + 1 }}"></button>
+                                    @endforeach
+                                </div>
+                            </div>
+                        @else
+                            <!-- Gambar tunggal untuk produk dengan 1 gambar -->
+                            <img src="{{ asset('storage/images/produk/' . $produk->gambar_produk->first()->nama_gambar) }}"
+                                 class="card-img-top product-image"
+                                 alt="{{ $produk->nama_produk }}"
+                                 style="width: 100%; height: 250px; object-fit: cover;">
+                        @endif
                     @else
                         <!-- Jika produk tidak punya gambar, tampilkan kotak kosong tinggi fix -->
                         <div class="no-image d-flex align-items-center justify-content-center bg-light" style="height: 250px;">
                             <i class="bi bi-image text-muted fs-1"></i>
                         </div>
-                    @endif
-
-                    <!-- Jika gambar lebih dari 1, tampilkan jumlahnya -->
-                    @if($produk->gambar_produk && $produk->gambar_produk->count() > 1)
-                    <div class="image-count">
-                        <small class="text-white">
-                            <i class="bi bi-images"></i> {{ $produk->gambar_produk->count() }}
-                        </small>
-                    </div>
                     @endif
 
                     <!-- Tombol aksi (like/share) muncul saat hover -->
@@ -228,15 +251,41 @@
         font-size: 3rem;
     }
 
-    /* Badge jumlah gambar */
-    .image-count {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        background: rgba(0,0,0,0.7);
-        padding: 4px 8px;
-        border-radius: 12px;
-        font-size: 0.75rem;
+    /* Carousel indicators styling */
+    .carousel-indicators {
+        bottom: 10px;
+    }
+
+    .carousel-indicators button {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background-color: rgba(255, 255, 255, 0.5);
+        border: none;
+        margin: 0 2px;
+    }
+
+    .carousel-indicators button.active {
+        background-color: #fff;
+    }
+
+    /* Carousel controls styling */
+    .carousel-control-prev,
+    .carousel-control-next {
+        width: 5%;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .product-card:hover .carousel-control-prev,
+    .product-card:hover .carousel-control-next {
+        opacity: 1;
+    }
+
+    .carousel-control-prev-icon,
+    .carousel-control-next-icon {
+        width: 15px;
+        height: 15px;
     }
 
     /* Tombol aksi muncul saat hover */
@@ -265,6 +314,10 @@
         border-color: #0d6efd;
     }
 
+    .hero-section {
+        position: relative;
+        overflow: hidden;
+    }
 </style>
 @endpush
 

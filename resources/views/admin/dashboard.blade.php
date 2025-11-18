@@ -29,7 +29,7 @@
                                 Total Pengguna
                             </div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                {{ $stats['totalUsers'] }}
+                                {{ $totalUsers }}
                             </div>
                         </div>
                         <div class="col-auto">
@@ -50,7 +50,7 @@
                                 Total Toko
                             </div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                {{ $stats['totalStores'] }}
+                                {{ $totalTokos }}
                             </div>
                         </div>
                         <div class="col-auto">
@@ -71,7 +71,7 @@
                                 Total Produk
                             </div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                {{ $stats['totalProducts'] }}
+                                {{ $totalProduks }}
                             </div>
                         </div>
                         <div class="col-auto">
@@ -92,7 +92,7 @@
                                 Kategori Aktif
                             </div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                {{ $stats['totalCategories'] }}
+                                {{ \App\Models\Kategori::count() }}
                             </div>
                         </div>
                         <div class="col-auto">
@@ -237,6 +237,9 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                @php
+                                    $recentUsers = \App\Models\User::latest()->take(5)->get();
+                                @endphp
                                 @foreach($recentUsers as $user)
                                 <tr>
                                     <td>{{ $user->nama }}</td>
@@ -247,7 +250,7 @@
                                         </span>
                                     </td>
                                     <td>
-                                        <span class="badge bg-{{ $user->status == 'active' ? 'success' : 'warning' }}">
+                                        <span class="badge bg-{{ $user->status == 'approved' ? 'success' : 'warning' }}">
                                             {{ ucfirst($user->status ?? 'pending') }}
                                         </span>
                                     </td>

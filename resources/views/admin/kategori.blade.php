@@ -1,6 +1,6 @@
-@extends('layout.sidbarMember')
+@extends('layout.sidbar')
 
-@section('content.member')
+@section('content')
 <div class="container-fluid py-4">
     <div class="row justify-content-center">
         <div class="col-12">
@@ -59,14 +59,14 @@
                                     </td>
                                     <td class="text-center">
                                         <div class="d-flex justify-content-center gap-2">
-                                            <form action="{{ route('kategori.destroy', $kategori) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus kategori ini?')">
+                                            <form action="{{ route('kategori.destroy', Crypt::encrypt($kategori->id)) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus kategori ini?')">
                                                 @csrf
                                                 @method('DELETE')
                                                 <div class="btn-group" role="group">
-                                                    <a href="{{ route('kategori.show', $kategori) }}" class="btn btn-sm btn-outline-secondary action-btn" title="Lihat Detail">
+                                                    <a href="{{ route('kategori.show', Crypt::encrypt($kategori->id)) }}" class="btn btn-sm btn-outline-secondary action-btn" title="Lihat Detail">
                                                         <i class="bi bi-eye"></i>
                                                     </a>
-                                                    <a href="{{ route('kategori.edit', $kategori) }}" class="btn btn-sm btn-outline-warning action-btn" title="Edit Kategori">
+                                                    <a href="{{ route('kategori.edit', Crypt::encrypt($kategori->id)) }}" class="btn btn-sm btn-outline-warning action-btn" title="Edit Kategori">
                                                         <i class="bi bi-pencil"></i>
                                                     </a>
                                                     <button type="submit" class="btn btn-sm btn-outline-danger action-btn" title="Hapus Kategori">

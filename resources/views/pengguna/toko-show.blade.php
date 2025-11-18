@@ -70,7 +70,7 @@
 
                     @if($produk->gambar_produk && $produk->gambar_produk->count() > 0)
                         <!-- Jika produk punya gambar di database -->
-                        <img src="{{ asset('images/produk/' . $produk->gambar_produk->first()->nama_gambar) }}"
+                        <img src="{{ asset('storage/images/produk/' . $produk->gambar_produk->first()->nama_gambar) }}"
                              class="card-img-top product-image"
                              alt="{{ $produk->nama_produk }}"
                              style="width: 100%; height: 250px; object-fit: cover;">

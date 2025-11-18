@@ -1,5 +1,5 @@
-@extends('layout.sidbarMember')
-@section('content.member')
+@extends('layout.sidbar')
+@section('content')
 <div class="container-fluid">
     <!-- Judul Halaman -->
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
@@ -21,7 +21,7 @@
                 </div>
 
                 <div class="card-body">
-                    <form action="{{ route('kategori.update', $kategori) }}" method="POST">
+                    <form action="{{ route('kategori.update', Crypt::encrypt($kategori->id)) }}" method="POST">
                         @csrf
                         @method('PUT')
 

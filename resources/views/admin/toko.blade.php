@@ -65,7 +65,7 @@
                                     <td>
                                         @if($toko->gambar)
                                             <div class="position-relative">
-                                                <img src="{{ asset($toko->gambar) }}" alt="Gambar Toko" class="rounded-3 border shadow-sm" style="width: 60px; height: 60px; object-fit: cover;">
+                                                <img src="{{ asset('storage' . $toko->gambar) }}" alt="Gambar Toko" class="rounded-3 border shadow-sm" style="width: 60px; height: 60px; object-fit: cover;">
                                                 <div class="position-absolute top-0 start-0 bg-success rounded-circle" style="width: 12px; height: 12px; margin: 5px;"></div>
                                             </div>
                                         @else
@@ -112,10 +112,10 @@
                                     <td class="text-center">
                                         <div class="d-flex justify-content-center gap-2">
                                             <div class="btn-group" role="group">
-                                                <button type="button" class="btn btn-sm btn-outline-primary action-btn" title="Lihat Detail" onclick="window.location='{{ route('toko.show',  encryptUrlSafe($toko->id)) }}'">
+                                                <button type="button" class="btn btn-sm btn-outline-primary action-btn" title="Lihat Detail" onclick="window.location='{{ route('toko.show',  Crypt::encrypt($toko->id)) }}'">
                                                     <i class="bi bi-eye"></i>
                                                 </button>
-                                                <button type="button" class="btn btn-sm btn-outline-warning action-btn" title="Edit Toko" onclick="window.location='{{ route('toko.edit', encryptUrlSafe($toko->id)) }}'">
+                                                <button type="button" class="btn btn-sm btn-outline-warning action-btn" title="Edit Toko" onclick="window.location='{{ route('toko.edit', Crypt::encrypt($toko->id)) }}'">
                                                     <i class="bi bi-pencil"></i>
                                                 </button>
                                                 <form action="{{ route('toko.destroy', Crypt::encrypt($toko->id)) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus toko ini?')">

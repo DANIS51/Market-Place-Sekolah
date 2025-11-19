@@ -9,7 +9,7 @@
             <div class="row align-items-center">
                 <div class="col-md-3 text-center">
                     @if($toko->gambar)
-                        <img src="{{ asset($toko->gambar) }}"
+                        <img src="{{ asset('storage' . $toko->gambar) }}"
                              class="rounded-circle img-fluid"
                              alt="{{ $toko->nama_toko }}"
                              style="width: 120px; height: 120px; object-fit: cover;">

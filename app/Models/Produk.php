@@ -31,6 +31,6 @@ class Produk extends Model
 
     public function gambar_produk()
     {
-        return $this->hasMany(Gambar_produk::class);
+        return $this->hasMany(Gambar_produk::class)->orderBy('id');
     }
 }

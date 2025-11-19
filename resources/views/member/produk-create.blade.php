@@ -50,13 +50,35 @@
                             @enderror
                         </div>
 
-                        <div class="mb-3">
-                            <label for="tanggal_upload" class="form-label fw-medium">Tanggal Upload <span class="text-danger">*</span></label>
-                            <input type="date" class="form-control rounded-3 @error('tanggal_upload') is-invalid @enderror" id="tanggal_upload" name="tanggal_upload" value="{{ old('tanggal_upload') }}" required>
-                            @error('tanggal_upload')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
+                        @if($tokos->isNotEmpty())
+                            @if($tokos->count() == 1)
+                                <input type="hidden" name="toko_id" value="{{ $tokos->first()->id }}">
+                                <div class="mb-3">
+                                    <label class="form-label fw-medium">Toko</label>
+                                    <div class="form-control rounded-3 bg-light">{{ $tokos->first()->nama_toko }}</div>
+                                </div>
+                            @else
+                                <div class="mb-3">
+                                    <label for="toko_id" class="form-label fw-medium">Toko <span class="text-danger">*</span></label>
+                                    <select class="form-select rounded-3 @error('toko_id') is-invalid @enderror" id="toko_id" name="toko_id" required>
+                                        <option value="">Pilih Toko</option>
+                                        @foreach($tokos as $toko)
+                                            <option value="{{ $toko->id }}" {{ old('toko_id', $toko->id) == $toko->id ? 'selected' : '' }}>
+                                                {{ $toko->nama_toko }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    @error('toko_id')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            @endif
+                        @else
+                        <div class="alert alert-warning">
+                            <i class="bi bi-exclamation-triangle me-2"></i>
+                            Anda belum memiliki toko. Silakan hubungi admin untuk membuat toko terlebih dahulu.
                         </div>
+                        @endif
 
                         <div class="mb-3">
                             <label for="deskripsi" class="form-label fw-medium">Deskripsi <span class="text-danger">*</span></label>
@@ -67,13 +89,13 @@
                         </div>
 
                         <div class="mb-4">
-                            <label for="gambar_produk" class="form-label fw-medium">Gambar Produk</label>
-                            <input type="file" class="form-control rounded-3 @error('gambar_produk') is-invalid @enderror" id="gambar_produk" name="gambar_produk[]" multiple accept="image/*">
+                            <label for="gambar" class="form-label fw-medium">Gambar Produk</label>
+                            <input type="file" class="form-control rounded-3 @error('gambar') is-invalid @enderror" id="gambar" name="gambar[]" multiple accept="image/*">
                             <div class="form-text text-muted">Pilih satu atau lebih gambar (JPEG, PNG, JPG, GIF). Maksimal 2MB per gambar.</div>
-                            @error('gambar_produk')
+                            @error('gambar')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
-                            @error('gambar_produk.*')
+                            @error('gambar.*')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>

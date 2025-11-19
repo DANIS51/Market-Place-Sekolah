@@ -98,10 +98,10 @@
                                             <a href="{{ route('produk.show', Crypt::encrypt($produk->id)) }}" class="btn btn-icon btn-view" title="Lihat Produk">
                                                 <i class="bi bi-eye"></i>
                                             </a>
-                                            <a href="{{ route('produk.edit', Crypt::encrypt($produk->id)) }}" class="btn btn-icon btn-edit" title="Edit Produk">
+                                            <a href="{{ route('produk.edit', urlencode(Crypt::encrypt($produk->id))) }}" class="btn btn-icon btn-edit" title="Edit Produk">
                                                 <i class="bi bi-pencil"></i>
                                             </a>
-                                            <form action="{{ route('produk.destroy', Crypt::encrypt($produk->id)) }}" method="POST" class="d-inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus produk ini?')">
+                                            <form action="{{ route('produk.destroy', urlencode(Crypt::encrypt($produk->id))) }}" method="POST" class="d-inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus produk ini?')">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-icon btn-delete" title="Hapus Produk">

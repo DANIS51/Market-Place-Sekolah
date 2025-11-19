@@ -12,10 +12,18 @@ class ProdukController extends Controller
 {
     public function index()
     {
-        $produks = Produk::with(['kategori', 'toko', 'gambar_produk'])->get();
+        $produks = Produk::with(['kategori', 'toko', 'gambar_produk'])
+            ->whereHas('toko', function($query) {
+                $query->where('user_id', auth()->id());
+            })
+            ->get();
         return view('member.produk', compact('produks'));
     }
-
+    public function detail($id){
+        $id = Crypt::decrypt($id);
+        $produk = Produk::with('gambar_produk')->firstOrFail($id);
+        return view('pengguna.produk-show',compact('produk'));
+    }
     public function create()
     {
         $kategoris = \App\Models\Kategori::all();
@@ -34,7 +42,7 @@ class ProdukController extends Controller
             'gambar.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        $produk = Produk::create($request->only(['nama_produk', 'harga', 'deskripsi', 'kategori_id', 'toko_id']));
+        $produk = Produk::create($request->only(['nama_produk', 'harga', 'deskripsi', 'kategori_id', 'toko_id']) + ['tanggal_upload' => now()->toDateString()]);
 
         if ($request->hasFile('gambar')) {
             foreach ($request->file('gambar') as $file) {
@@ -59,28 +67,37 @@ class ProdukController extends Controller
 
     public function edit($id)
     {
-        $produk = Produk::with(['gambar_produk'])->findOrFail($id);
+        $id = urldecode($id);
+        $produk = Produk::with(['gambar_produk'])
+            ->whereHas('toko', function($query) {
+                $query->where('user_id', auth()->id());
+            })
+            ->findOrFail(Crypt::decrypt($id));
         $kategoris = \App\Models\Kategori::all();
-        $tokos = \App\Models\Toko::all();
+        $tokos = \App\Models\Toko::where('user_id', auth()->id())->get();
         return view('member.produk-edit', compact('produk', 'kategoris', 'tokos'));
     }
 
     public function update(Request $request, $id)
     {
+        $id = urldecode($id);
         $request->validate([
             'nama_produk' => 'required|string|max:255',
             'harga' => 'required|numeric|min:0',
             'deskripsi' => 'required|string',
             'kategori_id' => 'required|exists:kategoris,id',
             'toko_id' => 'required|exists:tokos,id',
-            'gambar.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+            'gambar_produk.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        $produk = Produk::findOrFail($id);
-        $produk->update($request->only(['nama_produk', 'harga', 'deskripsi', 'kategori_id', 'toko_id']));
+        $produk = Produk::whereHas('toko', function($query) {
+                $query->where('user_id', auth()->id());
+            })
+            ->findOrFail(Crypt::decrypt($id));
+        $produk->update($request->only(['nama_produk', 'harga', 'deskripsi', 'kategori_id', 'toko_id']) + ['tanggal_upload' => now()->toDateString()]);
 
-        if ($request->hasFile('gambar')) {
-            foreach ($request->file('gambar') as $file) {
+        if ($request->hasFile('gambar_produk')) {
+            foreach ($request->file('gambar_produk') as $file) {
                 $imageName = time() . '_' . uniqid() . '.' . $file->extension();
                 $file->storeAs('images/produk', $imageName, 'public');
 
@@ -91,12 +108,27 @@ class ProdukController extends Controller
             }
         }
 
+        // Handle image deletion
+        if ($request->has('delete_images')) {
+            foreach ($request->input('delete_images') as $imageId) {
+                $gambar = Gambar_produk::find($imageId);
+                if ($gambar && $gambar->produk_id == $produk->id) {
+                    Storage::disk('public')->delete('images/produk/' . $gambar->nama_gambar);
+                    $gambar->delete();
+                }
+            }
+        }
+
         return redirect()->route('produk.index')->with('success', 'Produk berhasil diperbarui');
     }
 
     public function destroy($id)
     {
-        $produk = Produk::findOrFail($id);
+        $id = urldecode($id);
+        $produk = Produk::whereHas('toko', function($query) {
+                $query->where('user_id', auth()->id());
+            })
+            ->findOrFail(Crypt::decrypt($id));
 
         // Hapus gambar terkait
         foreach ($produk->gambar_produk as $gambar) {

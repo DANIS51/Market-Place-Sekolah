@@ -13,7 +13,7 @@
                         <div class="product-gallery">
                             <!-- Gambar utama -->
                             <div class="main-image-container">
-                                <img src="{{ asset('storage/images/produk/' . $produk->gambar_produk->first()->nama_gambar) }}?v={{ time() }}"
+                                <img src="{{ asset('storage/images/produk/' . $produk->gambar_produk->first()->nama_gambar) }}"
                                      class="main-image"
                                      alt="{{ $produk->nama_produk }}"
                                      id="mainImage">
@@ -23,12 +23,12 @@
                             @if($produk->gambar_produk->count() > 1)
                             <div class="thumbnail-container mt-3">
                                 <div class="row g-2">
-                                    @foreach($produk->gambar_produk as $gambar)
+                                    @foreach($produk->gambar_produk as $index => $gambar)
                                     <div class="col-3">
-                                        <img src="{{ asset('storage/images/produk/' . $gambar->nama_gambar) }}?v={{ time() }}"
-                                             class="thumbnail"
+                                        <img src="{{ asset('storage/images/produk/' . $gambar->nama_gambar) }}"
+                                             class="thumbnail {{ $index == 0 ? 'active-thumbnail' : '' }}"
                                              alt="Thumbnail"
-                                             onclick="changeImage('{{ asset('storage/images/produk/' . $gambar->nama_gambar) }}?v={{ time() }}', this)">
+                                             onclick="changeImage('{{ asset('storage/images/produk/' . $gambar->nama_gambar) }}', this)">
                                     </div>
                                     @endforeach
                                 </div>
@@ -175,7 +175,7 @@
 @endpush
 
 @push('scripts')
-<script defer>
+<script>
 function changeImage(src, element) {
     const mainImg = document.getElementById('mainImage');
 
@@ -194,6 +194,11 @@ function changeImage(src, element) {
 
     element.classList.add('active-thumbnail');
 }
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Thumbnail script loaded');
+});
 </script>
 @endpush
 

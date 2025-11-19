@@ -1,6 +1,6 @@
- 
-@extends('layout.sidbar')
-@section('content')
+
+@extends('layout.sidbarMember')
+@section('content.member')
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">
@@ -9,7 +9,7 @@
                     <h5 class="card-title mb-0">Edit Produk</h5>
                 </div>
                 <div class="card-body">
-                    <form action="{{ route('produk.update', Crypt::encrypt($produk->id)) }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('produk.update', urlencode(Crypt::encrypt($produk->id))) }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
 
@@ -46,7 +46,7 @@
 
                         <div class="mb-3">
                             <label for="tanggal_upload" class="form-label">Tanggal Upload <span class="text-danger">*</span></label>
-                            <input type="date" class="form-control @error('tanggal_upload') is-invalid @enderror" id="tanggal_upload" name="tanggal_upload" value="{{ old('tanggal_upload', $produk->tanggal_upload) }}" required>
+                            <input type="date" class="form-control @error('tanggal_upload') is-invalid @enderror" id="tanggal_upload" name="tanggal_upload" value="{{ old('tanggal_upload', $produk->tanggal_upload ? \Carbon\Carbon::parse($produk->tanggal_upload)->format('Y-m-d') : now()->format('Y-m-d')) }}" required>
                             @error('tanggal_upload')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -59,6 +59,8 @@
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
+
+                        <input type="hidden" name="toko_id" value="{{ $produk->toko_id }}">
 
                         <div class="mb-3">
                             <label class="form-label">Gambar Produk Saat Ini</label>

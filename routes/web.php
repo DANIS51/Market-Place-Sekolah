@@ -30,6 +30,7 @@ Route::get('/pengguna/kategori',[PenggunaController::class, 'kategori'])->name('
 Route::get('/pengguna/kategori/{kategori}',[PenggunaController::class, 'kategoriShow'])->name('pengguna.kategori.show');
 Route::get('/pengguna/toko',[PenggunaController::class, 'toko'])->name('pengguna.toko');
 Route::get('/pengguna/toko/{toko}',[PenggunaController::class, 'tokoShow'])->name('pengguna.toko.show');
+Route::get('/pengguna/produk/{id}',[ProdukController::class, 'detail'])->name('pengguna.produk.show');
 
 // routes/web.php
 Route::get('/produk/{id}/whatsapp', [OrderController::class, 'payViaWhatsapp'])

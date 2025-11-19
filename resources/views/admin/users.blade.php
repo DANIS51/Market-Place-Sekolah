@@ -104,21 +104,21 @@ use Illuminate\Support\Facades\Crypt;
                                     <td class="text-center">
                                         <div class="d-flex justify-content-center gap-2">
                                             <div class="btn-group" role="group">
-                                                <button type="button" class="btn btn-sm btn-outline-primary action-btn" title="Lihat Detail" onclick="window.location='{{ route('users.show', encryptUrlSafe($user->id)) }}'">
+                                                <button type="button" class="btn btn-sm btn-outline-primary action-btn" title="Lihat Detail" onclick="window.location='{{ route('users.show', Crypt::encrypt($user->id)) }}'">
                                                     <i class="bi bi-eye"></i>
                                                 </button>
                                                 <button type="button" class="btn btn-sm btn-outline-warning action-btn" title="Edit Pengguna" onclick="window.location='{{ route('users.edit', Crypt::encrypt($user->id)) }}'">
                                                     <i class="bi bi-pencil"></i>
                                                 </button>
                                                 @if($user->status == 'pending')
-                                                    <form action="{{ route('users.approve', encryptUrlSafe($user->id)) }}" method="POST" class="d-inline">
+                                                    <form action="{{ route('users.approve', Crypt::encrypt($user->id)) }}" method="POST" class="d-inline">
                                                         @csrf
                                                         @method('PATCH')
                                                         <button type="submit" class="btn btn-sm btn-outline-success action-btn" title="Setujui Pengguna">
                                                             <i class="bi bi-check-circle"></i>
                                                         </button>
                                                     </form>
-                                                    <form action="{{ route('users.reject', encryptUrlSafe($user->id)) }}" method="POST" class="d-inline">
+                                                    <form action="{{ route('users.reject', Crypt::encrypt($user->id)) }}" method="POST" class="d-inline">
                                                         @csrf
                                                         @method('PATCH')
                                                         <button type="submit" class="btn btn-sm btn-outline-danger action-btn" title="Tolak Pengguna">
@@ -126,7 +126,7 @@ use Illuminate\Support\Facades\Crypt;
                                                         </button>
                                                     </form>
                                                 @else
-                                                    <form action="{{ route('users.destroy', encryptUrlSafe($user->id)) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus pengguna ini?')" class="d-inline">
+                                                    <form action="{{ route('users.destroy', Crypt::encrypt($user->id)) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus pengguna ini?')" class="d-inline">
                                                         @csrf
                                                         @method('DELETE')
                                                         <button type="submit" class="btn btn-sm btn-outline-danger action-btn" title="Hapus Pengguna">

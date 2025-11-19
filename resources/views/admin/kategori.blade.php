@@ -63,10 +63,10 @@
                                                 @csrf
                                                 @method('DELETE')
                                                 <div class="btn-group" role="group">
-                                                    <a href="{{ route('kategori.show', encryptUrlSafe($kategori->id)) }}" class="btn btn-sm btn-outline-secondary action-btn" title="Lihat Detail">
+                                                    <a href="{{ route('kategori.show', Crypt::encrypt($kategori->id)) }}" class="btn btn-sm btn-outline-secondary action-btn" title="Lihat Detail">
                                                         <i class="bi bi-eye"></i>
                                                     </a>
-                                                    <a href="{{ route('kategori.edit', encryptUrlSafe($kategori->id)) }}" class="btn btn-sm btn-outline-warning action-btn" title="Edit Kategori">
+                                                    <a href="{{ route('kategori.edit', Crypt::encrypt($kategori->id)) }}" class="btn btn-sm btn-outline-warning action-btn" title="Edit Kategori">
                                                         <i class="bi bi-pencil"></i>
                                                     </a>
                                                     <button type="submit" class="btn btn-sm btn-outline-danger action-btn" title="Hapus Kategori">

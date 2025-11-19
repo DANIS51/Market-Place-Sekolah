@@ -24,7 +24,7 @@
                     <div class="row">
                         <div class="col-md-4 text-center mb-4">
                             @if($toko->gambar)
-                                <img src="{{ asset($toko->gambar) }}" alt="Gambar Toko" class="img-fluid rounded shadow-sm" style="max-width: 200px; max-height: 200px; object-fit: cover;">
+                                <img src="{{ asset('storage' . $toko->gambar) }}" alt="Gambar Toko" class="img-fluid rounded shadow-sm" style="max-width: 200px; max-height: 200px; object-fit: cover;">
                             @else
                                 <div class="bg-light rounded d-flex align-items-center justify-content-center mx-auto" style="width: 200px; height: 200px;">
                                     <i class="bi bi-shop display-1 text-muted"></i>

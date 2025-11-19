@@ -46,7 +46,7 @@ class TokoController extends Controller
         if ($request->hasFile('gambar')) {
             $imageName = time() . '.' . $request->gambar->extension();
             $request->gambar->storeAs('images/toko', $imageName, 'public');
-            $data['gambar_toko'] = $imageName;
+            $data['gambar'] = '/images/toko/' . $imageName;
         }
 
         Toko::create($data);
@@ -108,13 +108,13 @@ class TokoController extends Controller
         // Handle image upload
         if ($request->hasFile('gambar')) {
             // Delete old image if exists
-            if ($toko->gambar_toko && \Storage::disk('public')->exists('images/toko/' . $toko->gambar_toko)) {
-                \Storage::disk('public')->delete('images/toko/' . $toko->gambar_toko);
+            if ($toko->gambar && Storage::disk('public')->exists(ltrim($toko->gambar, '/'))) {
+                Storage::disk('public')->delete(ltrim($toko->gambar, '/'));
             }
 
             $imageName = time() . '.' . $request->gambar->extension();
             $request->gambar->storeAs('images/toko', $imageName, 'public');
-            $data['gambar_toko'] = $imageName;
+            $data['gambar'] = '/images/toko/' . $imageName;
         }
 
         $toko->update($data);
@@ -138,8 +138,8 @@ class TokoController extends Controller
         }
 
         // Delete image if exists
-        if ($toko->gambar_toko && \Storage::disk('public')->exists('images/toko/' . $toko->gambar_toko)) {
-            \Storage::disk('public')->delete('images/toko/' . $toko->gambar_toko);
+        if ($toko->gambar && Storage::disk('public')->exists(ltrim($toko->gambar, '/'))) {
+            Storage::disk('public')->delete(ltrim($toko->gambar, '/'));
         }
 
         $toko->delete();

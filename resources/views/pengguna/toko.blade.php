@@ -33,7 +33,7 @@
 
                 <!-- Gambar Toko -->
                 @if($toko->gambar)
-                <img src="{{ asset($toko->gambar) }}" class="card-img-top" alt="{{ $toko->nama_toko }}" style="height: 200px; object-fit: cover;">
+                <img src="{{ asset('storage' . $toko->gambar) }}" class="card-img-top" alt="{{ $toko->nama_toko }}" style="height: 200px; object-fit: cover;">
                 @else
                 <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
                     <i class="bi bi-shop text-muted" style="font-size: 3rem;"></i>

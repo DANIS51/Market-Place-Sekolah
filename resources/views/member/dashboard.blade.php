@@ -32,7 +32,7 @@
                     <div class="row align-items-center">
                         <div class="col-md-2 text-center">
                             @if($user->toko->gambar)
-                                <img src="{{ asset($user->toko->gambar) }}" alt="Toko" class="rounded-circle" style="width: 80px; height: 80px; object-fit: cover;">
+                                <img src="{{ asset('storage' . $user->toko->gambar) }}" alt="Toko" class="rounded-circle" style="width: 80px; height: 80px; object-fit: cover;">
                             @else
                                 <div class="bg-primary rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
                                     <i class="bi bi-shop text-white fa-2x"></i>

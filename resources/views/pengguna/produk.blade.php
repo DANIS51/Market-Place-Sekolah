@@ -60,13 +60,13 @@
                         @if($produk->gambar_produk->count() > 1)
                             <!-- Carousel untuk produk dengan banyak gambar -->
                             <div id="carousel-{{ $produk->id }}" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="3000">
-                                <div class="carousel-inner rounded-top">
+                                <div class="carousel-inner rounded-top" style="height: 250px;">
                                     @foreach($produk->gambar_produk as $index => $gambar)
-                                    <div class="carousel-item {{ $index == 0 ? 'active' : '' }}">
+                                    <div class="carousel-item {{ $index == 0 ? 'active' : '' }}" style="height: 100%;">
                                         <img src="{{ asset('storage/images/produk/' . $gambar->nama_gambar) }}"
-                                             class="d-block w-100 product-image"
+                                             class="d-block w-100 carousel-product-image"
                                              alt="{{ $produk->nama_produk }} - Gambar {{ $index + 1 }}"
-                                             style="height: 250px; object-fit: cover;">
+                                             style="height: 100%; object-fit: cover; width: 100%;">
                                     </div>
                                     @endforeach
                                 </div>
@@ -230,8 +230,20 @@
         transition: transform 0.5s ease;
     }
 
+    .carousel-product-image {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+        transition: transform 0.5s ease;
+    }
+
     /* Jika card dihover, gambar zoom */
-    .product-card:hover .product-image {
+    .product-card:hover .product-image,
+    .product-card:hover .carousel-product-image {
         transform: scale(1.05);
     }
 

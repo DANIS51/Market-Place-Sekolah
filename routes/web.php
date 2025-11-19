@@ -7,6 +7,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProdukController;
 use App\Http\Controllers\GambarController;
 use App\Http\Controllers\KategoriController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PenggunaController;
 use App\Http\Controllers\TokoController;
 
@@ -30,6 +31,9 @@ Route::get('/pengguna/kategori/{kategori}',[PenggunaController::class, 'kategori
 Route::get('/pengguna/toko',[PenggunaController::class, 'toko'])->name('pengguna.toko');
 Route::get('/pengguna/toko/{toko}',[PenggunaController::class, 'tokoShow'])->name('pengguna.toko.show');
 
+// routes/web.php
+Route::get('/produk/{id}/whatsapp', [OrderController::class, 'payViaWhatsapp'])
+     ->name('product.whatsapp');
 /*
 |--------------------------------------------------------------------------
 | AUTHENTICATION ROUTES

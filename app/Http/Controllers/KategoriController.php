@@ -33,6 +33,7 @@ class KategoriController extends Controller
                 ->withInput();
         }
 
+
         Kategori::create([
             'nama_kategori' => $request->nama_kategori,
         ]);
@@ -55,6 +56,7 @@ class KategoriController extends Controller
     public function edit($id)
     {
         try {
+            $id = str_replace(['_', '-'], ['/', '+'], $id);
             $real_id = Crypt::decrypt($id);
             $kategori = Kategori::findOrFail($real_id);
             return view('admin.kategori-edit', compact('kategori'));
@@ -92,6 +94,7 @@ class KategoriController extends Controller
     public function destroy($id)
     {
         try {
+            $id = str_replace(['_', '-'], ['/', '+'], $id);
             $real_id = Crypt::decrypt($id);
             $kategori = Kategori::findOrFail($real_id);
         } catch (\Exception $e) {

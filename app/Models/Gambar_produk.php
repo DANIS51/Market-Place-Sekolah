@@ -7,11 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Gambar_produk extends Model
 {
-    //
     use HasFactory;
 
-
-    protected  $guarded = [];
+    protected $fillable = [
+        'produk_id',
+        'nama_gambar',
+    ];
 
     public function produk()
     {

@@ -15,7 +15,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
     <!-- Custom CSS -->
-     <style>
+    @stack('styles')
+    <style>
         :root {
             --primary-color: #6c757d;
             --accent-color: #ffc107;
@@ -220,7 +221,7 @@
                     <i class="bi bi-bag-heart-fill text-warning me-2 fs-4"></i>
                     <span>SekoolMart</span>
                 </a>
-             
+
 
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <!-- Navigation Links -->

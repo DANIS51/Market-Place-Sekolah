@@ -69,11 +69,8 @@ class PenggunaController extends Controller
         } catch (\Exception $e) {
             abort(404);
         }
-        $kategori = Kategori::findOrFail($kategoriId);
-        $produks = Produk::with('kategori', 'toko', 'gambar_produk')
-                        ->where('kategori_id', $kategoriId)
-                        ->paginate(12);
-        return view('pengguna.kategori-show', compact('kategori', 'produks'));
+        $kategori = Kategori::with('produks.toko', 'produks.gambar_produk')->findOrFail($kategoriId);
+        return view('pengguna.kategori-detail', compact('kategori'));
     }
 
     public function toko(Request $request)
@@ -108,6 +105,7 @@ class PenggunaController extends Controller
     public function produkShow($produkId)
     {
         try {
+            $produkId = str_replace(['_', '-'], ['/', '+'], $produkId);
             $produkId = Crypt::decrypt($produkId);
         } catch (\Exception $e) {
             abort(404);

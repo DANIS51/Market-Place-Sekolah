@@ -1,3 +1,5 @@
+
+
 @extends('layout.sidbar')
 @section('content')
 <div class="container-fluid py-4">
@@ -26,7 +28,7 @@
                                 </div>
                             </div>
                             <div class="d-flex gap-2">
-                                <a href="{{ route('users.edit', $user) }}" class="btn btn-light btn-sm rounded-3 px-3" title="Edit Pengguna">
+                                <a href="{{ route('users.edit', encryptUrlSafe($user->id)) }}" class="btn btn-light btn-sm rounded-3 px-3" title="Edit Pengguna">
                                     <i class="bi bi-pencil me-1"></i> Edit
                                 </a>
                                 <a href="{{ route('users.index') }}" class="btn btn-outline-light btn-sm rounded-3 px-3" title="Kembali">

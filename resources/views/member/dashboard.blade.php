@@ -46,9 +46,7 @@
                                 <div class="col-sm-3">
                                     <small class="text-muted">Status</small>
                                     <br>
-                                    <span class="badge bg-{{ $user->toko->status == 'active' ? 'success' : 'warning' }}">
-                                        {{ ucfirst($user->toko->status ?? 'pending') }}
-                                    </span>
+
                                 </div>
                                 <div class="col-sm-3">
                                     <small class="text-muted">Bergabung</small>
@@ -177,7 +175,7 @@
                             <div class="col-md-4 mb-3">
                                 <div class="card h-100">
                                     @if($produk->gambar_produk->first())
-                                        <img src="{{ asset('images/produk/' . $produk->gambar_produk->first()->nama_gambar) }}" class="card-img-top" alt="{{ $produk->nama_produk }}" style="height: 150px; object-fit: cover;">
+                                        <img src="{{ asset('storage/images/produk/' . $produk->gambar_produk->first()->nama_gambar) }}" class="card-img-top" alt="{{ $produk->nama_produk }}" style="height: 150px; object-fit: cover;">
                                     @else
                                         <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 150px;">
                                             <i class="bi bi-image text-muted fa-2x"></i>

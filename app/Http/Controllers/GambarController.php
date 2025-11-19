@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Gambar_produk;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class GambarController extends Controller
 {
@@ -29,7 +30,9 @@ class GambarController extends Controller
         if ($request->hasFile('gambar')) {
             $file = $request->file('gambar');
             $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
-            $file->move(public_path('images/produk'), $filename);
+
+            // Store file using Laravel Storage (consistent with ProdukController)
+            $path = $file->storeAs('images/produk', $filename, 'public');
 
             Gambar_produk::create([
                 'produk_id' => $request->produk_id,

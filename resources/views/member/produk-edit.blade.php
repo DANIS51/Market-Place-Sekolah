@@ -1,3 +1,4 @@
+ 
 @extends('layout.sidbar')
 @section('content')
 <div class="container-fluid">
@@ -8,7 +9,7 @@
                     <h5 class="card-title mb-0">Edit Produk</h5>
                 </div>
                 <div class="card-body">
-                    <form action="{{ route('produk.update', $produk) }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('produk.update', Crypt::encrypt($produk->id)) }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
 

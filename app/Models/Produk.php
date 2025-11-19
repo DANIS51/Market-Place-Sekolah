@@ -17,6 +17,7 @@ class Produk extends Model
         'deskripsi',
         'tanggal_upload',
         'toko_id',
+        'stok',
     ];
 
     public function toko()

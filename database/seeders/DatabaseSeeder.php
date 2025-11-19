@@ -25,12 +25,6 @@ class DatabaseSeeder extends Seeder
             'role' => 'admin',
         ]);
 
-        User::create([
-            'nama' => 'member',
-            'kontak' => '081234567890',
-            'username' => 'member',
-            'password' => bcrypt('member'),
-            'role' => 'member',
-        ]);
+       
     }
 }

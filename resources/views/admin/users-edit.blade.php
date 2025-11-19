@@ -1,3 +1,5 @@
+
+
 @extends('layout.sidbar')
 @section('content')
 <div class="container-fluid py-4">
@@ -58,7 +60,7 @@
                         </div>
                     </div>
 
-                    <form id="editUserForm" action="{{ route('users.update', $user) }}" method="POST" class="p-5">
+                    <form id="editUserForm" action="{{ route('users.update', Crypt::encrypt($user->id)) }}" method="POST" class="p-5">
                         @csrf
                         @method('PUT')
 
@@ -164,19 +166,87 @@
                                         </label>
                                         <div class="position-relative">
                                             <input type="password" class="form-control @error('password') is-invalid @enderror"
-                                                   id="password" name="password" placeholder="Masukkan password baru"
-                                                   style="padding: 0.875rem 3rem 0.875rem 1rem; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 1rem; transition: all 0.3s ease;">
+                                                   id="password" name="password" placeholder="Masukkan password baru atau generate otomatis"
+                                                   style="padding: 0.875rem 5rem 0.875rem 1rem; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 1rem; transition: all 0.3s ease;">
                                             <div style="position: absolute; bottom: 0; left: 0; width: 0; height: 2px; background: linear-gradient(90deg, #667eea, #764ba2); transition: width 0.3s ease;"></div>
+
+                                            <!-- Generate Password Button -->
+                                            <button type="button" id="generatePassword" class="btn btn-sm position-absolute"
+                                                    style="right: 3.5rem; top: 50%; transform: translateY(-50%); background: linear-gradient(135deg, #667eea, #764ba2); border: none; color: white; padding: 0.25rem 0.5rem; border-radius: 8px; font-size: 0.75rem; z-index: 10;" title="Generate Strong Password">
+                                                <i class="bi bi-magic"></i>
+                                            </button>
+
+                                            <!-- Toggle Visibility Button -->
                                             <button type="button" id="togglePassword" style="position: absolute; right: 1rem; top: 50%; transform: translateY(-50%); background: none; border: none; color: #94a3b8; cursor: pointer; z-index: 10;">
                                                 <i class="bi bi-eye"></i>
                                             </button>
                                         </div>
-                                        <div class="mt-2" id="passwordStrengthContainer" style="display: none;">
-                                            <div style="width: 100%; height: 4px; background: #e2e8f0; border-radius: 2px; overflow: hidden;">
-                                                <div class="strength-fill" style="height: 100%; width: 0; transition: all 0.3s ease; border-radius: 2px;"></div>
+
+                                        <!-- Enhanced Password Requirements -->
+                                        <div class="mt-3" id="passwordRequirements" style="display: none;">
+                                            <div class="row g-2">
+                                                <div class="col-6">
+                                                    <div class="requirement-item d-flex align-items-center" data-requirement="length">
+                                                        <i class="bi bi-circle me-2 text-muted" style="font-size: 0.75rem;"></i>
+                                                        <small class="text-muted">Minimal 8 karakter</small>
+                                                    </div>
+                                                </div>
+                                                <div class="col-6">
+                                                    <div class="requirement-item d-flex align-items-center" data-requirement="uppercase">
+                                                        <i class="bi bi-circle me-2 text-muted" style="font-size: 0.75rem;"></i>
+                                                        <small class="text-muted">Huruf besar (A-Z)</small>
+                                                    </div>
+                                                </div>
+                                                <div class="col-6">
+                                                    <div class="requirement-item d-flex align-items-center" data-requirement="lowercase">
+                                                        <i class="bi bi-circle me-2 text-muted" style="font-size: 0.75rem;"></i>
+                                                        <small class="text-muted">Huruf kecil (a-z)</small>
+                                                    </div>
+                                                </div>
+                                                <div class="col-6">
+                                                    <div class="requirement-item d-flex align-items-center" data-requirement="number">
+                                                        <i class="bi bi-circle me-2 text-muted" style="font-size: 0.75rem;"></i>
+                                                        <small class="text-muted">Angka (0-9)</small>
+                                                    </div>
+                                                </div>
+                                                <div class="col-6">
+                                                    <div class="requirement-item d-flex align-items-center" data-requirement="special">
+                                                        <i class="bi bi-circle me-2 text-muted" style="font-size: 0.75rem;"></i>
+                                                        <small class="text-muted">Karakter khusus (!@#$%)</small>
+                                                    </div>
+                                                </div>
+                                                <div class="col-6">
+                                                    <div class="requirement-item d-flex align-items-center" data-requirement="strength">
+                                                        <i class="bi bi-circle me-2 text-muted" style="font-size: 0.75rem;"></i>
+                                                        <small class="text-muted">Kekuatan: <span id="strengthLabel">Lemah</span></small>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <small class="text-muted">Kekuatan password: <span id="strengthText">-</span></small>
                                         </div>
+
+                                        <!-- Advanced Strength Indicator -->
+                                        <div class="mt-3" id="passwordStrengthContainer" style="display: none;">
+                                            <div class="d-flex align-items-center mb-2">
+                                                <div class="flex-grow-1 me-3">
+                                                    <div style="width: 100%; height: 6px; background: #e2e8f0; border-radius: 3px; overflow: hidden; position: relative;">
+                                                        <div class="strength-fill" style="height: 100%; width: 0; transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); border-radius: 3px; position: relative;">
+                                                            <div class="strength-glow" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent); animation: shimmer 2s infinite;"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="d-flex align-items-center">
+                                                    <i id="strengthIcon" class="bi bi-shield me-2" style="font-size: 1.2rem; color: #6c757d; transition: all 0.3s ease;"></i>
+                                                    <small id="strengthText" class="fw-semibold">-</small>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex justify-content-between">
+                                                <small class="text-muted">Lemah</small>
+                                                <small class="text-muted">Sedang</small>
+                                                <small class="text-muted">Kuat</small>
+                                                <small class="text-muted">Sangat Kuat</small>
+                                            </div>
+                                        </div>
+
                                         @error('password')
                                             <div class="text-danger mt-2" style="font-size: 0.875rem; display: flex; align-items: center;">
                                                 <i class="bi bi-exclamation-circle me-2"></i>
@@ -331,9 +401,45 @@
 }
 
 /* Password Strength */
-.strength-weak { background: #ef4444 !important; width: 33% !important; }
-.strength-medium { background: #f59e0b !important; width: 66% !important; }
-.strength-strong { background: #10b981 !important; width: 100% !important; }
+.strength-weak { background: linear-gradient(90deg, #ef4444, #dc2626) !important; width: 25% !important; }
+.strength-medium { background: linear-gradient(90deg, #f59e0b, #d97706) !important; width: 50% !important; }
+.strength-strong { background: linear-gradient(90deg, #10b981, #059669) !important; width: 75% !important; }
+.strength-very-strong { background: linear-gradient(90deg, #3b82f6, #2563eb) !important; width: 100% !important; }
+
+/* Password Requirements */
+.requirement-item .bi-check-circle {
+    color: #10b981 !important;
+}
+
+.requirement-item .bi-x-circle {
+    color: #ef4444 !important;
+}
+
+/* Generate Password Button */
+#generatePassword {
+    transition: all 0.3s ease;
+}
+
+#generatePassword:hover {
+    transform: translateY(-50%) scale(1.05);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+#generatePassword:active {
+    transform: translateY(-50%) scale(0.95);
+}
+
+/* Shimmer Animation */
+@keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+/* Strength Icon Colors */
+.strength-weak-icon { color: #ef4444 !important; }
+.strength-medium-icon { color: #f59e0b !important; }
+.strength-strong-icon { color: #10b981 !important; }
+.strength-very-strong-icon { color: #3b82f6 !important; }
 
 /* Avatar Hover */
 .avatar-preview:hover {
@@ -360,11 +466,18 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Toggle password visibility
+    // Elements
     const togglePassword = document.getElementById('togglePassword');
     const passwordInput = document.getElementById('password');
     const passwordStrengthContainer = document.getElementById('passwordStrengthContainer');
+    const passwordRequirements = document.getElementById('passwordRequirements');
+    const generatePassword = document.getElementById('generatePassword');
+    const strengthFill = document.querySelector('.strength-fill');
+    const strengthText = document.getElementById('strengthText');
+    const strengthIcon = document.getElementById('strengthIcon');
+    const strengthLabel = document.getElementById('strengthLabel');
 
+    // Toggle password visibility
     if (togglePassword && passwordInput) {
         togglePassword.addEventListener('click', function() {
             const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
@@ -374,40 +487,153 @@ document.addEventListener('DOMContentLoaded', function() {
             icon.classList.toggle('bi-eye');
             icon.classList.toggle('bi-eye-slash');
         });
+    }
 
-        // Show/hide password strength based on input
-        passwordInput.addEventListener('input', function() {
-            if (this.value.length > 0) {
-                passwordStrengthContainer.style.display = 'block';
-                checkPasswordStrength(this.value);
-            } else {
-                passwordStrengthContainer.style.display = 'none';
-            }
+    // Generate strong password
+    if (generatePassword && passwordInput) {
+        generatePassword.addEventListener('click', function() {
+            const strongPassword = generateStrongPassword();
+            passwordInput.value = strongPassword;
+            passwordInput.focus();
+
+            // Trigger input event to update strength indicator
+            passwordInput.dispatchEvent(new Event('input'));
+
+            // Add visual feedback
+            this.style.transform = 'translateY(-50%) scale(0.95)';
+            setTimeout(() => {
+                this.style.transform = 'translateY(-50%) scale(1)';
+            }, 150);
         });
     }
 
-    // Password strength checker
-    function checkPasswordStrength(password) {
-        const strengthFill = document.querySelector('.strength-fill');
-        const strengthText = document.getElementById('strengthText');
+    // Password input handler
+    if (passwordInput) {
+        passwordInput.addEventListener('input', function() {
+            const password = this.value;
 
-        let strength = 0;
-        if (password.length >= 8) strength++;
-        if (password.match(/[a-z]/) && password.match(/[A-Z]/)) strength++;
-        if (password.match(/[0-9]/)) strength++;
-        if (password.match(/[^a-zA-Z0-9]/)) strength++;
+            if (password.length > 0) {
+                passwordStrengthContainer.style.display = 'block';
+                passwordRequirements.style.display = 'block';
+                checkPasswordStrength(password);
+                updateRequirements(password);
+            } else {
+                passwordStrengthContainer.style.display = 'none';
+                passwordRequirements.style.display = 'none';
+            }
+        });
 
-        strengthFill.className = 'strength-fill';
-        if (strength <= 1) {
-            strengthFill.classList.add('strength-weak');
-            strengthText.textContent = 'Lemah';
-        } else if (strength === 2) {
-            strengthFill.classList.add('strength-medium');
-            strengthText.textContent = 'Sedang';
-        } else {
-            strengthFill.classList.add('strength-strong');
-            strengthText.textContent = 'Kuat';
+        passwordInput.addEventListener('focus', function() {
+            if (this.value.length > 0) {
+                passwordRequirements.style.display = 'block';
+            }
+        });
+
+        passwordInput.addEventListener('blur', function() {
+            setTimeout(() => {
+                passwordRequirements.style.display = 'none';
+            }, 200);
+        });
+    }
+
+    // Generate strong password function
+    function generateStrongPassword() {
+        const lowercase = 'abcdefghijklmnopqrstuvwxyz';
+        const uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        const numbers = '0123456789';
+        const symbols = '!@#$%^&*()_+-=[]{}|;:,.<>?';
+
+        let password = '';
+
+        // Ensure at least one of each type
+        password += lowercase[Math.floor(Math.random() * lowercase.length)];
+        password += uppercase[Math.floor(Math.random() * uppercase.length)];
+        password += numbers[Math.floor(Math.random() * numbers.length)];
+        password += symbols[Math.floor(Math.random() * symbols.length)];
+
+        // Fill the rest randomly
+        const allChars = lowercase + uppercase + numbers + symbols;
+        for (let i = password.length; i < 12; i++) {
+            password += allChars[Math.floor(Math.random() * allChars.length)];
         }
+
+        // Shuffle the password
+        return password.split('').sort(() => Math.random() - 0.5).join('');
+    }
+
+    // Enhanced password strength checker
+    function checkPasswordStrength(password) {
+        let score = 0;
+        let feedback = [];
+
+        // Length check
+        if (password.length >= 8) score += 1;
+        if (password.length >= 12) score += 1;
+
+        // Character variety
+        if (password.match(/[a-z]/)) score += 1;
+        if (password.match(/[A-Z]/)) score += 1;
+        if (password.match(/[0-9]/)) score += 1;
+        if (password.match(/[^a-zA-Z0-9]/)) score += 1;
+
+        // Complexity patterns
+        if (password.match(/(.)\1{2,}/)) score -= 1; // Repeated characters
+        if (password.match(/123|234|345|456|567|678|789|890/)) score -= 1; // Sequential numbers
+        if (password.match(/abc|bcd|cde|def|efg|fgh|ghi|hij|ijk|jkl|klm|lmn|mno|nop|opq|pqr|qrs|rst|stu|tuv|uvw|vwx|wxy|xyz/i)) score -= 1; // Sequential letters
+
+        score = Math.max(0, Math.min(4, score));
+
+        // Update UI
+        strengthFill.className = 'strength-fill';
+        strengthIcon.className = 'bi me-2';
+
+        if (score <= 1) {
+            strengthFill.classList.add('strength-weak');
+            strengthIcon.classList.add('bi-shield-x', 'strength-weak-icon');
+            strengthText.textContent = 'Lemah';
+            strengthLabel.textContent = 'Lemah';
+        } else if (score === 2) {
+            strengthFill.classList.add('strength-medium');
+            strengthIcon.classList.add('bi-shield-check', 'strength-medium-icon');
+            strengthText.textContent = 'Sedang';
+            strengthLabel.textContent = 'Sedang';
+        } else if (score === 3) {
+            strengthFill.classList.add('strength-strong');
+            strengthIcon.classList.add('bi-shield-fill-check', 'strength-strong-icon');
+            strengthText.textContent = 'Kuat';
+            strengthLabel.textContent = 'Kuat';
+        } else {
+            strengthFill.classList.add('strength-very-strong');
+            strengthIcon.classList.add('bi-shield-fill-exclamation', 'strength-very-strong-icon');
+            strengthText.textContent = 'Sangat Kuat';
+            strengthLabel.textContent = 'Sangat Kuat';
+        }
+    }
+
+    // Update requirements checklist
+    function updateRequirements(password) {
+        const requirements = {
+            length: password.length >= 8,
+            uppercase: /[A-Z]/.test(password),
+            lowercase: /[a-z]/.test(password),
+            number: /[0-9]/.test(password),
+            special: /[^a-zA-Z0-9]/.test(password)
+        };
+
+        Object.keys(requirements).forEach(req => {
+            const item = document.querySelector(`[data-requirement="${req}"]`);
+            const icon = item.querySelector('i');
+
+            if (requirements[req]) {
+                icon.className = 'bi bi-check-circle-fill me-2';
+                item.classList.add('text-success');
+                item.classList.remove('text-muted');
+            } else {
+                icon.className = 'bi bi-circle me-2';
+                item.classList.remove('text-success');
+                item.classList.add('text-muted');
+            }
+        });
     }
 
     // Form validation animations

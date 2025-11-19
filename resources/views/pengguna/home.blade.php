@@ -1,4 +1,4 @@
-@extends('layout.navbar')
+ @extends('layout.navbar')
 
 @section('conten-pengguna')
 <div class="container-fluid text-center mb-5 p-5  hero-section"

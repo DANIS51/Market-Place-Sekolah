@@ -51,6 +51,7 @@ class UserController extends Controller
     public function show($id)
     {
         try {
+            $id = str_replace(['_', '-'], ['/', '+'], $id);
             $real_id = Crypt::decrypt($id);
             $user = User::findOrFail($real_id);
             return view('admin.users-show', compact('user'));
@@ -62,6 +63,7 @@ class UserController extends Controller
     public function edit($id)
     {
         try {
+            $id = str_replace(['_', '-'], ['/', '+'], $id);
             $real_id = Crypt::decrypt($id);
             $user = User::findOrFail($real_id);
             return view('admin.users-edit', compact('user'));
@@ -73,6 +75,7 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
         try {
+            $id = str_replace(['_', '-'], ['/', '+'], $id);
             $real_id = Crypt::decrypt($id);
             $user = User::findOrFail($real_id);
         } catch (\Exception $e) {
@@ -107,6 +110,7 @@ class UserController extends Controller
     public function destroy($id)
     {
         try {
+            $id = str_replace(['_', '-'], ['/', '+'], $id);
             $real_id = Crypt::decrypt($id);
             $user = User::findOrFail($real_id);
         } catch (\Exception $e) {
@@ -120,6 +124,7 @@ class UserController extends Controller
     public function approve($id)
     {
         try {
+            $id = str_replace(['_', '-'], ['/', '+'], $id);
             $real_id = Crypt::decrypt($id);
             $user = User::findOrFail($real_id);
         } catch (\Exception $e) {

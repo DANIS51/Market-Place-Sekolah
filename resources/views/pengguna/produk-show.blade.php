@@ -13,7 +13,7 @@
                         <div class="product-gallery">
                             <!-- Gambar utama -->
                             <div class="main-image-container">
-                                <img src="{{ asset('storage/images/produk/' . $produk->gambar_produk->first()->nama_gambar) }}"
+                                <img src="{{ asset('storage/images/produk/' . $produk->gambar_produk->first()->nama_gambar) }}?v={{ time() }}"
                                      class="main-image"
                                      alt="{{ $produk->nama_produk }}"
                                      id="mainImage">
@@ -25,10 +25,10 @@
                                 <div class="row g-2">
                                     @foreach($produk->gambar_produk as $gambar)
                                     <div class="col-3">
-                                        <img src="{{ asset('storage/images/produk/' . $gambar->nama_gambar) }}"
+                                        <img src="{{ asset('storage/images/produk/' . $gambar->nama_gambar) }}?v={{ time() }}"
                                              class="thumbnail"
                                              alt="Thumbnail"
-                                             onclick="changeImage('{{ asset('storage/images/produk/' . $gambar->nama_gambar) }}')">
+                                             onclick="changeImage('{{ asset('storage/images/produk/' . $gambar->nama_gambar) }}?v={{ time() }}', this)">
                                     </div>
                                     @endforeach
                                 </div>
@@ -98,9 +98,11 @@
 
                     <!-- Tombol Aksi -->
                     <div class="d-grid gap-2">
-                        <button class="btn btn-success btn-lg">
-                            <i class="bi bi-whatsapp me-2"></i> Hubungi via WhatsApp
-                        </button>
+                        <a href="{{ route('product.whatsapp',  Crypt::encrypt($produk->id)) }}"
+                           class="btn btn-success btn-lg">
+                           Bayar via WhatsApp
+                        </a>
+
                         <button class="btn btn-outline-primary">
                             <i class="bi bi-heart me-2"></i> Simpan ke Wishlist
                         </button>
@@ -114,7 +116,6 @@
     <div class="mt-5">
         <h3 class="fw-bold mb-4">Produk Serupa</h3>
         <div class="row g-4">
-            <!-- Placeholder untuk produk serupa -->
             <div class="col-12 text-center py-4">
                 <small class="text-muted">Produk serupa akan ditampilkan di sini</small>
             </div>
@@ -128,53 +129,37 @@
         position: relative;
     }
 
-    /* Container untuk gambar utama dengan dimensi tetap */
     .main-image-container {
         width: 100%;
-        height: 400px; /* Tinggi tetap untuk gambar utama */
+        height: 400px;
         overflow: hidden;
         background: #f8f9fa;
         border-radius: 8px;
-        position: relative;
     }
 
-    /* Gambar utama mengisi container penuh */
     .main-image {
         width: 100%;
         height: 100%;
-        object-fit: cover; /* Memastikan gambar memenuhi container tanpa distorsi */
-        object-position: center; /* Fokus pada tengah gambar */
-        display: block;
-        transition: transform 0.3s ease;
+        object-fit: cover;
+        object-position: center;
+        transition: opacity .3s ease;
     }
 
-    /* Container untuk placeholder gambar kosong */
     .no-image-container {
         width: 100%;
-        height: 400px; /* Sama dengan tinggi gambar utama */
-        overflow: hidden;
+        height: 400px;
         background: #f8f9fa;
         border-radius: 8px;
-    }
-
-    .no-image {
-        width: 100%;
-        height: 100%;
-    }
-
-    /* Styling untuk thumbnail */
-    .thumbnail-container {
-        width: 100%;
     }
 
     .thumbnail {
         width: 100%;
-        height: 80px; /* Tinggi tetap untuk thumbnail */
-        object-fit: cover; /* Memastikan thumbnail proporsional */
+        height: 80px;
+        object-fit: cover;
         cursor: pointer;
         border: 2px solid transparent;
         border-radius: 8px;
-        transition: all 0.3s ease;
+        transition: all .3s ease;
     }
 
     .thumbnail:hover {
@@ -182,23 +167,32 @@
         transform: scale(1.05);
     }
 
-    /* Responsive untuk ukuran gambar */
-    @media (max-width: 768px) {
-        .main-image-container {
-            height: 300px; /* Tinggi lebih kecil untuk mobile */
-        }
-
-        .no-image-container {
-            height: 300px;
-        }
+    .active-thumbnail {
+        border-color: #0d6efd !important;
+        transform: scale(1.05);
     }
 </style>
 @endpush
 
 @push('scripts')
-<script>
-function changeImage(src) {
-    document.getElementById('mainImage').src = src;
+<script defer>
+function changeImage(src, element) {
+    const mainImg = document.getElementById('mainImage');
+
+    // Animasi fade
+    mainImg.style.opacity = 0;
+
+    setTimeout(() => {
+        mainImg.src = src;
+        mainImg.style.opacity = 1;
+    }, 200);
+
+    // Thumbnail aktif
+    document.querySelectorAll('.thumbnail').forEach(img => {
+        img.classList.remove('active-thumbnail');
+    });
+
+    element.classList.add('active-thumbnail');
 }
 </script>
 @endpush

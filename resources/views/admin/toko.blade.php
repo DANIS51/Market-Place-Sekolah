@@ -112,13 +112,13 @@
                                     <td class="text-center">
                                         <div class="d-flex justify-content-center gap-2">
                                             <div class="btn-group" role="group">
-                                                <button type="button" class="btn btn-sm btn-outline-primary action-btn" title="Lihat Detail" onclick="window.location='{{ route('toko.show', $toko) }}'">
+                                                <button type="button" class="btn btn-sm btn-outline-primary action-btn" title="Lihat Detail" onclick="window.location='{{ route('toko.show',  encryptUrlSafe($toko->id)) }}'">
                                                     <i class="bi bi-eye"></i>
                                                 </button>
-                                                <button type="button" class="btn btn-sm btn-outline-warning action-btn" title="Edit Toko" onclick="window.location='{{ route('toko.edit', $toko) }}'">
+                                                <button type="button" class="btn btn-sm btn-outline-warning action-btn" title="Edit Toko" onclick="window.location='{{ route('toko.edit', encryptUrlSafe($toko->id)) }}'">
                                                     <i class="bi bi-pencil"></i>
                                                 </button>
-                                                <form action="{{ route('toko.destroy', $toko) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus toko ini?')">
+                                                <form action="{{ route('toko.destroy', Crypt::encrypt($toko->id)) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus toko ini?')">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="btn btn-sm btn-outline-danger action-btn" title="Hapus Toko">

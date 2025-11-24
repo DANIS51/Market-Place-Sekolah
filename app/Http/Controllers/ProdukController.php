@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Gambar_produk;
 use App\Models\Produk;
+use App\Models\Toko;
+use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Storage;
@@ -19,15 +21,28 @@ class ProdukController extends Controller
             ->get();
         return view('member.produk', compact('produks'));
     }
+
+    // Helper: coba decrypt, fallback ke id asli (cast ke int bila numeric)
+    private function decryptId($id)
+    {
+        $id = urldecode($id);
+        try {
+            $decrypted = Crypt::decrypt($id);
+        } catch (DecryptException $e) {
+            $decrypted = $id;
+        }
+        return is_numeric($decrypted) ? (int) $decrypted : $decrypted;
+    }
+
     public function detail($id){
-        $id = Crypt::decrypt($id);
-        $produk = Produk::with('gambar_produk')->firstOrFail($id);
+        $produk = Produk::with('gambar_produk')->findOrFail($this->decryptId($id));
         return view('pengguna.produk-show',compact('produk'));
     }
     public function create()
     {
         $kategoris = \App\Models\Kategori::all();
-        $tokos = \App\Models\Toko::all();
+        // ambil hanya toko milik user yang login
+        $tokos = Toko::where('user_id', auth()->id())->get();
         return view('member.produk-create', compact('kategoris', 'tokos'));
     }
 
@@ -38,11 +53,24 @@ class ProdukController extends Controller
             'harga' => 'required|numeric|min:0',
             'deskripsi' => 'required|string',
             'kategori_id' => 'required|exists:kategoris,id',
-            'toko_id' => 'required|exists:tokos,id',
+            // toko_id sekarang optional; jika tidak dikirim, akan diisi otomatis
+            'toko_id' => 'nullable|exists:tokos,id',
             'gambar.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        $produk = Produk::create($request->only(['nama_produk', 'harga', 'deskripsi', 'kategori_id', 'toko_id']) + ['tanggal_upload' => now()->toDateString()]);
+        // tentukan toko_id: pakai dari request jika ada (mis. user punya banyak toko),
+        // atau fallback ke toko pertama milik user yang login
+        $tokoId = $request->input('toko_id')
+            ?: Toko::where('user_id', auth()->id())->value('id');
+
+        if (!$tokoId) {
+            return back()->withErrors(['toko_id' => 'Anda belum memiliki toko.'])->withInput();
+        }
+
+        $produk = Produk::create($request->only(['nama_produk', 'harga', 'deskripsi', 'kategori_id']) + [
+            'toko_id' => $tokoId,
+            'tanggal_upload' => now()->toDateString()
+        ]);
 
         if ($request->hasFile('gambar')) {
             foreach ($request->file('gambar') as $file) {
@@ -61,18 +89,20 @@ class ProdukController extends Controller
 
     public function show($id)
     {
-        $produk = Produk::with(['kategori', 'toko', 'gambar_produk'])->findOrFail(Crypt::decrypt($id));
+        $produk = Produk::with(['kategori', 'toko', 'gambar_produk'])->findOrFail($this->decryptId($id));
         return view('pengguna.produk-show', compact('produk'));
     }
 
     public function edit($id)
     {
-        $id = urldecode($id);
+        $decryptedId = $this->decryptId($id);
+
         $produk = Produk::with(['gambar_produk'])
             ->whereHas('toko', function($query) {
                 $query->where('user_id', auth()->id());
             })
-            ->findOrFail(Crypt::decrypt($id));
+            ->findOrFail($decryptedId);
+
         $kategoris = \App\Models\Kategori::all();
         $tokos = \App\Models\Toko::where('user_id', auth()->id())->get();
         return view('member.produk-edit', compact('produk', 'kategoris', 'tokos'));
@@ -80,7 +110,7 @@ class ProdukController extends Controller
 
     public function update(Request $request, $id)
     {
-        $id = urldecode($id);
+        $decryptedId = $this->decryptId($id);
         $request->validate([
             'nama_produk' => 'required|string|max:255',
             'harga' => 'required|numeric|min:0',
@@ -93,7 +123,7 @@ class ProdukController extends Controller
         $produk = Produk::whereHas('toko', function($query) {
                 $query->where('user_id', auth()->id());
             })
-            ->findOrFail(Crypt::decrypt($id));
+            ->findOrFail($decryptedId);
         $produk->update($request->only(['nama_produk', 'harga', 'deskripsi', 'kategori_id', 'toko_id']) + ['tanggal_upload' => now()->toDateString()]);
 
         if ($request->hasFile('gambar_produk')) {
@@ -124,11 +154,11 @@ class ProdukController extends Controller
 
     public function destroy($id)
     {
-        $id = urldecode($id);
+        $decryptedId = $this->decryptId($id);
         $produk = Produk::whereHas('toko', function($query) {
                 $query->where('user_id', auth()->id());
             })
-            ->findOrFail(Crypt::decrypt($id));
+            ->findOrFail($decryptedId);
 
         // Hapus gambar terkait
         foreach ($produk->gambar_produk as $gambar) {
@@ -144,7 +174,7 @@ class ProdukController extends Controller
     public function whatsapp($id)
     {
         $id = str_replace(['_', '-'], ['/', '+'], $id);
-        $produk = Produk::findOrFail(Crypt::decrypt($id));
+        $produk = Produk::findOrFail($this->decryptId($id));
         $message = "Halo, saya tertarik dengan produk {$produk->nama_produk}. Harga: Rp " . number_format($produk->harga, 0, ',', '.') . ". Deskripsi: {$produk->deskripsi}";
         $whatsappUrl = "https://wa.me/{$produk->toko->kontak_toko}?text=" . urlencode($message);
         return redirect($whatsappUrl);

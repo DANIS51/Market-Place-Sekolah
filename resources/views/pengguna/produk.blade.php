@@ -1,16 +1,12 @@
 @extends('layout.navbar')
 
 @section('conten-pengguna')
-<!-- Judul Halaman -->
-<div class="container-fluid text-center mb-5 hero-section" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;padding: 70px;">
-    <h1 class="display-5 fw-bold mb-3">Semua Produk</h1>
-    <p class="lead mb-4">Temukan produk berkualitas dari berbagai toko di sekolah kami</p>
-</div>
+
 <div class="container py-4">
 
 
     <!-- Filter Section -->
-    <div class="card border-0 shadow-sm mb-4">
+    <div class=" card border-0 shadow-sm mb-4">
         <div class="card-body">
             <form method="GET" action="{{ route('show.produk.index') }}" class="row g-3">
                 <div class="col-md-4">
@@ -204,10 +200,7 @@
         min-height: 480px; /* Tinggi minimum yang lebih konsisten */
     }
 
-    .product-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
-    }
+    
 
     /* Container gambar dengan tinggi tetap */
     .product-image-container {

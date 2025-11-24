@@ -1,11 +1,7 @@
 @extends('layout.navbar')
 
 @section('conten-pengguna')
-<!-- Judul Halaman -->
-<div class="container-fluid text-center mb-5 hero-section" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 74px;">
-    <h1 class="display-5 fw-bold mb-3">Kategori Produk</h1>
-    <p class="lead text-muted">Jelajahi berbagai kategori produk di marketplace sekolah kami</p>
-</div>
+ 
 <div class="container py-4">
 
 

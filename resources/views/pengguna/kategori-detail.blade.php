@@ -100,7 +100,8 @@
                     <div class="d-grid gap-2">
                         <button class="btn btn-primary rounded-pill"
                                 onclick="viewProduct({{ $produk->id }})">
-                            <i class="bi bi-eye me-1"></i> Lihat Detail
+                                                <a class="text-white text-decoration-none" href="{{ route('pengguna.produk.show', Crypt::encrypt($produk->id)) }}"><i class="bi bi-eye me-1"></i> Lihat Detail</a>
+
                         </button>
                     </div>
                 </div>
@@ -132,8 +133,8 @@
         <div class="modal-content rounded-4 border-0">
             <div class="modal-header border-0">
                 <h5 class="modal-title fw-bold">Detail Produk</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
+                <a href="{{ route('pengguna.produk.show', Crypt::encrypt($produk->id)) }}"></a>
+             </div>
             <div class="modal-body" id="productDetail">
                 <!-- Detail produk dimuat via AJAX -->
             </div>

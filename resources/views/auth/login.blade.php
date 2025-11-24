@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body {
-            background: linear-gradient(135deg, #FFFFFFFF 0%, #C9FF05FF 100%);
+            background: #FFFFFF;
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -33,7 +33,7 @@
         .logo {
             width: 60px;
             height: 60px;
-            background: linear-gradient(135deg, #FFFFFFFF 0%, #E9FF25FF 100%);
+            background: linear-gradient(135deg, #F9D342 0%, #F4E285 100%);
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -41,6 +41,7 @@
             margin: 0 auto 1rem;
             color: white;
             font-size: 1.5rem;
+            box-shadow: 0 4px 10px rgba(249, 211, 66, 0.3);
         }
 
         h2 {
@@ -58,16 +59,18 @@
         }
 
         .form-control {
-            border: 2px solid #e1e5e9;
+            border: 2px solid #F4E285;
             border-radius: 8px;
             padding: 0.75rem 1rem;
             font-size: 0.95rem;
-            transition: border-color 0.3s ease;
+            transition: all 0.3s ease;
+            background-color: #FEFEFE;
         }
 
         .form-control:focus {
-            border-color: #667eea;
-            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+            border-color: #F9D342;
+            box-shadow: 0 0 0 0.2rem rgba(249, 211, 66, 0.15);
+            background-color: #FFFEF7;
         }
 
         .form-label {
@@ -77,20 +80,23 @@
         }
 
         .btn-login {
-            background: linear-gradient(135deg, #FFFFFFFF 0%, #DDFF19FF 100%);
+            background: linear-gradient(135deg, #F9D342 0%, #F4E285 100%);
             border: none;
             border-radius: 8px;
             padding: 0.75rem;
             font-weight: 600;
-            color: white;
+            color: #333;
             width: 100%;
             margin-top: 1rem;
-            transition: transform 0.2s ease;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(249, 211, 66, 0.2);
         }
 
         .btn-login:hover {
             transform: translateY(-2px);
-            background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+            background: linear-gradient(135deg, #F4E285 0%, #F9D342 100%);
+            box-shadow: 0 6px 15px rgba(249, 211, 66, 0.3);
+            color: #333;
         }
 
         .register-link {
@@ -101,13 +107,15 @@
         }
 
         .register-link a {
-            color: #667eea;
+            color: #D4A017;
             text-decoration: none;
             font-weight: 500;
+            transition: color 0.3s ease;
         }
 
         .register-link a:hover {
             text-decoration: underline;
+            color: #B8941F;
         }
 
         .alert {
@@ -117,13 +125,15 @@
         }
 
         .alert-danger {
-            background: #ffebee;
-            color: #c62828;
+            background: #FFF5F5;
+            color: #E53E3E;
+            border-left: 4px solid #FEB2B2;
         }
 
         .alert-success {
-            background: #e8f5e8;
-            color: #2e7d32;
+            background: #F0FFF4;
+            color: #38A169;
+            border-left: 4px solid #9AE6B4;
         }
 
         .footer {
@@ -144,8 +154,7 @@
 <body>
     <div class="login-card">
         <div class="" >
-            <a href="{{ route('home') }}"><i class="fa fa-arrow-left"></i></a>
-
+            <a href="{{ route('home') }}"><i class="fas fa-arrow-left" style="color: #D4A017;"></i></a>
         </div>
         <div class="logo-section">
             <div class="logo">

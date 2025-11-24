@@ -1,8 +1,9 @@
- @extends('layout.navbar')
+@extends('layout.navbar')
 
 @section('conten-pengguna')
-<div class="container-fluid text-center mb-5 p-5  hero-section"
-     style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+
+<!-- HERO SECTION -->
+<div class="container-fluid text-center mb-5 p-5 hero-section" style="color: white;">
     <h1 class="display-5 fw-bold mb-3">Marketplace Sekolah</h1>
     <p class="lead mb-4">Temukan produk berkualitas dari berbagai toko di sekolah kami</p>
     <div class="container d-flex justify-content-center">
@@ -14,8 +15,8 @@
         </form>
     </div>
 </div>
+
 <div class="container py-4">
-    <!-- Hero Section -->
 
     <!-- Statistik Singkat -->
     <div class="row mb-5">
@@ -30,6 +31,7 @@
                 </div>
             </div>
         </div>
+
         <div class="col-md-4 mb-3">
             <div class="card border-0 shadow-sm rounded-3 bg-success text-white stat-card">
                 <div class="card-body text-center py-4">
@@ -41,6 +43,7 @@
                 </div>
             </div>
         </div>
+
         <div class="col-md-4 mb-3">
             <div class="card border-0 shadow-sm rounded-3 bg-warning text-white stat-card">
                 <div class="card-body text-center py-4">
@@ -54,7 +57,7 @@
         </div>
     </div>
 
-    <!-- Kategori Populer -->
+    <!-- Kategori -->
     <div class="mb-5">
         <div class="d-flex justify-content-between align-items-center mb-4 section-header">
             <h2 class="h4 fw-bold mb-0">
@@ -64,6 +67,7 @@
                 Lihat Semua <i class="bi bi-arrow-right"></i>
             </a>
         </div>
+
         <div class="row g-3">
             @forelse($kategoris as $kategori)
             <div class="col-lg-3 col-md-4 col-sm-6">
@@ -92,7 +96,7 @@
         </div>
     </div>
 
-    <!-- Toko Terbaik -->
+    <!-- TOKO -->
     <div class="mb-5">
         <div class="d-flex justify-content-between align-items-center mb-4 section-header">
             <h2 class="h4 fw-bold mb-0">
@@ -102,6 +106,7 @@
                 Lihat Semua <i class="bi bi-arrow-right"></i>
             </a>
         </div>
+
         <div class="row g-3">
             @forelse($tokos as $toko)
             <div class="col-lg-3 col-md-4 col-sm-6">
@@ -121,6 +126,7 @@
                                 </div>
                                 @endif
                             </div>
+
                             <h6 class="card-title fw-bold mb-2">{{ $toko->nama_toko }}</h6>
                             <small class="text-muted d-block mb-2">{{ $toko->user->name ?? 'Pemilik' }}</small>
                             <span class="badge bg-success rounded-pill px-3 py-1">{{ $toko->produks_count }} Produk</span>
@@ -139,7 +145,7 @@
         </div>
     </div>
 
-    <!-- Produk Unggulan -->
+    <!-- PRODUK -->
     <div class="mb-5">
         <div class="d-flex justify-content-between align-items-center mb-4 section-header">
             <h2 class="h4 fw-bold mb-0">
@@ -151,14 +157,14 @@
         </div>
     </div>
 
-    <!-- Grid Produk -->
     <div class="row g-4">
+
         @forelse($produks as $produk)
         <div class="col-lg-3 col-md-4 col-sm-6">
             <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden product-card">
-                <!-- Container gambar produk -->
+
                 <div class="position-relative product-image-container">
-                    <!-- Badge diskon atau promo -->
+
                     @if($produk->diskon)
                     <div class="position-absolute top-0 start-0 m-2">
                         <span class="badge bg-danger rounded-pill px-3 py-2">
@@ -169,7 +175,7 @@
 
                     @if($produk->gambar_produk && $produk->gambar_produk->count() > 0)
                         @if($produk->gambar_produk->count() > 1)
-                            <!-- Carousel untuk produk dengan banyak gambar -->
+
                             <div id="carousel-home-{{ $produk->id }}" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="3000">
                                 <div class="carousel-inner rounded-top" style="height: 250px;">
                                     @foreach($produk->gambar_produk as $index => $gambar)
@@ -182,7 +188,6 @@
                                     @endforeach
                                 </div>
 
-                                <!-- Controls -->
                                 <button class="carousel-control-prev" type="button" data-bs-target="#carousel-home-{{ $produk->id }}" data-bs-slide="prev">
                                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                                     <span class="visually-hidden">Previous</span>
@@ -192,46 +197,42 @@
                                     <span class="visually-hidden">Next</span>
                                 </button>
 
-                                <!-- Indicators -->
                                 <div class="carousel-indicators position-absolute bottom-0 mb-2">
                                     @foreach($produk->gambar_produk as $index => $gambar)
                                     <button type="button" data-bs-target="#carousel-home-{{ $produk->id }}" data-bs-slide-to="{{ $index }}" class="{{ $index == 0 ? 'active' : '' }}" aria-current="{{ $index == 0 ? 'true' : 'false' }}" aria-label="Slide {{ $index + 1 }}"></button>
                                     @endforeach
                                 </div>
                             </div>
+
                         @else
-                            <!-- Gambar tunggal untuk produk dengan 1 gambar -->
+
                             <img src="{{ asset('storage/images/produk/' . $produk->gambar_produk->first()->nama_gambar) }}"
                                  class="card-img-top product-image"
                                  alt="{{ $produk->nama_produk }}"
                                  style="width: 100%; height: 250px; object-fit: cover;">
                         @endif
+
                     @else
-                        <!-- Jika produk tidak punya gambar, tampilkan kotak kosong tinggi fix -->
                         <div class="no-image d-flex align-items-center justify-content-center bg-light" style="height: 250px;">
                             <i class="bi bi-image text-muted fs-1"></i>
                         </div>
                     @endif
                 </div>
 
-                <!-- Bagian detail card -->
                 <div class="card-body d-flex flex-column">
-                    <!-- Kategori produk -->
+
                     <div class="mb-2">
                         <span class="badge bg-primary bg-opacity-10 text-primary rounded-pill px-3 py-1">
                             {{ $produk->kategori->nama_kategori ?? 'Umum' }}
                         </span>
                     </div>
 
-                    <!-- Nama Produk -->
                     <h6 class="card-title fw-bold mb-2">{{ $produk->nama_produk }}</h6>
 
-                    <!-- Deskripsi singkat -->
                     <p class="card-text text-muted small mb-3 flex-grow-1">
                         {{ Str::limit($produk->deskripsi, 60) }}
                     </p>
 
-                    <!-- Harga + Nama toko -->
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <div>
                             <span class="h5 text-success fw-bold mb-0 d-block">
@@ -242,7 +243,6 @@
                             </small>
                         </div>
 
-                        <!-- Rating static -->
                         <div class="rating">
                             @for($i = 1; $i <= 5; $i++)
                             <i class="bi bi-star-fill text-warning"></i>
@@ -250,7 +250,6 @@
                         </div>
                     </div>
 
-                    <!-- Tombol lihat detail -->
                     <div class="d-grid gap-2">
                         <a href="{{ route('pengguna.produk.show', Crypt::encrypt($produk->id)) }}" class="btn btn-primary rounded-pill">
                             <i class="bi bi-eye me-1"></i> Lihat Detail
@@ -261,7 +260,6 @@
         </div>
 
         @empty
-        <!-- Jika tidak ada produk -->
         <div class="col-12 text-center py-5">
             <div class="alert alert-light border-0 shadow-sm rounded-4">
                 <i class="bi bi-inbox text-muted" style="font-size: 4rem;"></i>
@@ -272,7 +270,6 @@
         @endforelse
     </div>
 
-    <!-- Pagination -->
     @if(isset($produks) && method_exists($produks, 'links'))
     <div class="d-flex justify-content-center mt-5">
         {{ $produks->links() }}
@@ -280,272 +277,106 @@
     @endif
 </div>
 
-<!-- Modal detail produk -->
-<div class="modal fade" id="productModal" tabindex="-1">
-    <div class="modal-dialog modal-lg modal-dialog-centered">
-        <div class="modal-content rounded-4 border-0">
-            <div class="modal-header border-0">
-                <h5 class="modal-title fw-bold">Detail Produk</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body" id="productDetail">
-                <!-- Detail produk dimuat via AJAX -->
-            </div>
-        </div>
-    </div>
-</div>
-
 @push('styles')
 <style>
-    /* Hero Section Styles */
-    .hero-section {
-        position: relative;
-        overflow: hidden;
-    }
+/* =============================
+   FIX HERO SECTION TANPA WARNA UNGU/BIRU
+   ============================= */
+.hero-section {
+    position: relative;
+    overflow: hidden;
 
-    /* Search Box Styles */
-    .search-box {
-        max-width: 500px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-        border-radius: 50px;
-        overflow: hidden;
-    }
+    background: url('{{ asset('asset/market.jpg') }}') no-repeat center center;
+    background-size: cover;
 
-    .search-box .form-control {
-        border-radius: 50px 0 0 50px;
-        padding: 12px 20px;
-    }
+    padding: 120px 20px;
+ }
 
-    .search-box .btn {
-        border-radius: 0 50px 50px 0;
-        padding: 0 20px;
-    }
+/* Overlay hitam tipis (biar teks tetap terlihat jelas) */
+.hero-section::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.35);
+}
 
-    /* Stat Card Styles */
-    .stat-card {
-        transition: all 0.3s ease;
-        overflow: hidden;
-    }
+.hero-section * {
+    position: relative;
+    z-index: 2;
+}
 
-    .stat-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
-    }
+/* ============================= */
 
-    .stat-card .icon-container {
-        width: 70px;
-        height: 70px;
-        border-radius: 50%;
-        background: rgba(255, 255, 255, 0.2);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin: 0 auto;
-    }
+.search-box {
+    max-width: 500px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    border-radius: 50px;
+    overflow: hidden;
+}
 
-    /* Section Header Styles */
-    .section-header {
-        position: relative;
-        padding-bottom: 10px;
-    }
+.search-box .form-control {
+    border-radius: 50px 0 0 50px;
+    padding: 12px 20px;
+}
 
-    .section-header::after {
-        content: '';
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 50px;
-        height: 3px;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        border-radius: 3px;
-    }
+.search-box .btn {
+    border-radius: 0 50px 50px 0;
+    padding: 0 20px;
+}
 
-    /* Category Card Styles */
-    .category-card {
-        transition: all 0.3s ease;
-        min-height: 200px;
-        border-radius: 1rem !important;
-    }
+/* Card styles dll tetap sama */
+.stat-card {
+    transition: box-shadow 0.3s ease; /* removed translateY transform */
+    overflow: hidden;
+}
 
-    .category-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-    }
+.stat-card:hover {
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+}
 
-    .category-card .card-top {
-        position: relative;
-        overflow: hidden;
-    }
+.section-header {
+    position: relative;
+    padding-bottom: 10px;
+}
 
-    .category-card .card-top::after {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(45deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 100%);
-    }
+.section-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 50px;
+    height: 3px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 3px;
+}
 
-    /* Store Card Styles */
-    .store-card {
-        transition: all 0.3s ease;
-        min-height: 250px;
-        border-radius: 1rem !important;
-    }
+/* Tambahan transisi untuk produk: hanya shadow, bukan translateY */
+.category-card, .store-card, .product-card {
+    transition: box-shadow 0.3s ease;
+}
 
-    .store-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-    }
+/* Transisi khusus untuk gambar produk (carousel atau statis) */
+.product-image,
+.carousel-product-image {
+    transition: transform 0.5s ease;
+}
 
-    .toko-avatar {
-        position: relative;
-        display: inline-block;
-    }
+/* Hover hanya ubah shadow (hapus translateY) untuk semua card */
+.product-card:hover,
+.category-card:hover,
+.store-card:hover {
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+}
 
-    .toko-avatar::after {
-        content: '';
-        position: absolute;
-        bottom: 0;
-        right: 0;
-        width: 20px;
-        height: 20px;
-        background: #28a745;
-        border-radius: 50%;
-        border: 3px solid white;
-    }
+/* Zoom gambar tetap aktif */
+.product-card:hover .product-image,
+.product-card:hover .carousel-product-image {
+    transform: scale(1.05);
+}
 
-    /* Product Card Styles */
-    .product-card {
-        transition: all 0.3s ease;
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        min-height: 520px;
-        border-radius: 1rem !important;
-        overflow: hidden;
-    }
-
-    .product-card:hover {
-        transform: translateY(-8px);
-        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
-    }
-
-    .product-image-container {
-        position: relative;
-        width: 100%;
-        height: 250px;
-        overflow: hidden;
-        background: #f8f9fa;
-    }
-
-    .product-image {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        object-position: center;
-        transition: transform 0.5s ease;
-    }
-
-    .product-card:hover .product-image {
-        transform: scale(1.05);
-    }
-
-    .no-image {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .no-image i {
-        font-size: 3rem;
-    }
-
-    /* Carousel indicators styling */
-    .carousel-indicators {
-        bottom: 10px;
-    }
-
-    .carousel-indicators button {
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
-        background-color: rgba(255, 255, 255, 0.5);
-        border: none;
-        margin: 0 2px;
-    }
-
-    .carousel-indicators button.active {
-        background-color: #fff;
-    }
-
-    /* Carousel controls styling */
-    .carousel-control-prev,
-    .carousel-control-next {
-        width: 5%;
-        opacity: 0;
-        transition: opacity 0.3s ease;
-    }
-
-    .product-card:hover .carousel-control-prev,
-    .product-card:hover .carousel-control-next {
-        opacity: 1;
-    }
-
-    .carousel-control-prev-icon,
-    .carousel-control-next-icon {
-        width: 15px;
-        height: 15px;
-    }
-
-    /* Rating Styles */
-    .rating {
-        display: flex;
-        gap: 2px;
-    }
-
-    /* Pagination Styles */
-    .pagination .page-link {
-        border-radius: 8px;
-        margin: 0 2px;
-        border: 1px solid #dee2e6;
-        color: #0d6efd;
-        font-weight: 500;
-    }
-
-    .pagination .page-item.active .page-link {
-        background-color: #0d6efd;
-        border-color: #0d6efd;
-    }
-
-    /* Responsive Styles */
-    @media (max-width: 768px) {
-        .hero-section {
-            padding: 2rem 1rem !important;
-        }
-
-        .display-5 {
-            font-size: 2rem;
-        }
-
-        .section-header {
-            flex-direction: column;
-            align-items: flex-start !important;
-        }
-
-        .section-header .btn {
-            margin-top: 10px;
-        }
-    }
 </style>
 @endpush
 

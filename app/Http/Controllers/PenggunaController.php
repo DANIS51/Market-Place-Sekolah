@@ -20,9 +20,9 @@ class PenggunaController extends Controller
             $query->whereRaw('LOWER(nama_produk) LIKE ?', ['%' . $searchTerm . '%']);
         }
 
-        $produks = $query->paginate(12);
-        $kategoris = Kategori::withCount('produks')->take(8)->get();
-        $tokos = Toko::with('user')->withCount('produks')->take(8)->get();
+        $produks = $query->take(4)->get();
+        $kategoris = Kategori::withCount('produks')->take(4)->get();
+        $tokos = Toko::with('user')->withCount('produks')->take(4)->get();
 
         return view('pengguna.home', compact('produks', 'kategoris', 'tokos'));
     }

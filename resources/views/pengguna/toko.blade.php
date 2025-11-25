@@ -1,7 +1,7 @@
 @extends('layout.navbar')
 
 @section('conten-pengguna')
- 
+
 <div class="container py-4">
 
 
@@ -88,9 +88,7 @@
         transition: transform 0.2s ease;
     }
 
-    .card:hover {
-        transform: translateY(-2px);
-    }
+  
 
     .card-img-top {
         border-bottom: 1px solid #dee2e6;

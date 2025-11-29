@@ -47,7 +47,7 @@
                             </div>
                             <div>
                                 <h5 class="mb-1 fw-bold">{{ $user->nama }}</h5>
-                                <p class="mb-1 text-muted">@{{ $user->username }}</p>
+                                <p class="mb-1 text-muted">{{ $user->username }}</p>
                                 <div class="d-flex align-items-center">
                                     <span class="badge rounded-pill bg-dark text-light px-3 py-2 me-2">
                                         <i class="bi bi-shield-lock me-1"></i> {{ $user->role == 'admin' ? 'Administrator' : 'Member' }}

@@ -93,7 +93,7 @@ class PenggunaController extends Controller
     public function tokoShow($tokoId)
     {
         $realId = $this->decryptId($tokoId);
-        $toko = Toko::with('user')->withCount('produks')->findOrFail($realId);
+        $toko = Toko::with('users')->withCount('produks')->findOrFail($realId);
         $produks = Produk::with('kategori', 'toko', 'gambar_produk')
                         ->where('toko_id', $realId)
                         ->paginate(12);

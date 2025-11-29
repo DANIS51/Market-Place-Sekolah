@@ -2,118 +2,138 @@
 
 @section('conten-pengguna')
 
-<div class="container py-4">
+<div class="container py-5">
 
+    <!-- Judul Halaman -->
+    <div class="text-center mb-5">
+        <h2 class="fw-bold text-primary">Kategori Produk</h2>
+        <p class="text-muted">Temukan berbagai kategori produk menarik</p>
+        <div class="underline mx-auto"></div>
+    </div>
 
     <!-- Grid Kategori -->
-    <div class="row g-4">
+    <div class="row g-4 justify-content-center">
         @forelse($kategoris as $kategori)
-        <div class="col-lg-3 col-md-4 col-sm-6">
-            <div class="card h-100 border-0 shadow-sm rounded-3 overflow-hidden category-card">
+        <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6">
+            <div class="card category-card border-0 shadow-sm rounded-4 overflow-hidden">
 
-                <!-- Header dengan ikon kategori -->
-                <div class="card-header bg-gradient text-white text-center py-4">
+                <!-- Header Icon -->
+                <div class="card-header category-header text-white text-center py-4">
                     <div class="category-icon mb-3">
                         <i class="bi bi-tag-fill fs-1"></i>
                     </div>
-                    <h5 class="card-title fw-bold mb-1">{{ $kategori->nama_kategori }}</h5>
+                    <h5 class="card-title fw-bold mb-0">{{ $kategori->nama_kategori }}</h5>
                 </div>
 
-                <!-- Body card -->
+                <!-- Body -->
                 <div class="card-body text-center d-flex flex-column">
 
-                    <!-- Jumlah produk -->
+                    <!-- Jumlah Produk -->
                     <div class="mb-3">
-                        <div class="bg-light rounded-pill py-2 px-3 d-inline-block">
-                            <span class="fw-bold text-primary">{{ $kategori->produks_count ?? 0 }}</span>
-                            <small class="text-muted">Produk</small>
+                        <div class="info-chip d-inline-block px-3 py-2">
+                            <span class="fw-bold">{{ $kategori->produks_count ?? 0 }}</span>
+                            <small class="text-muted"> Produk</small>
                         </div>
                     </div>
 
-                    <!-- Deskripsi kategori -->
-                    <p class="card-text text-muted small mb-4 flex-grow-1">
-                        Temukan berbagai produk dalam kategori {{ $kategori->nama_kategori }}
+                    <!-- Deskripsi -->
+                    <p class="text-muted small mb-4 flex-grow-1">
+                        Jelajahi produk dalam kategori {{ $kategori->nama_kategori }}.
                     </p>
 
-                    <!-- Tombol lihat produk -->
-                    <div class="mt-auto">
-                        <a href="{{ route('pengguna.kategori.show', Crypt::encrypt($kategori->id)) }}" class="btn btn-primary rounded-pill w-100">
-                            <i class="bi bi-eye me-1"></i> Lihat Produk
-                        </a>
-                    </div>
+                    <!-- Button -->
+                    <a href="{{ route('pengguna.kategori.show', Crypt::encrypt($kategori->id)) }}"
+                        class="btn btn-primary rounded-pill w-100 py-2 btn-hover">
+                        <i class="bi bi-eye me-1"></i> Lihat Produk
+                    </a>
                 </div>
             </div>
         </div>
-
         @empty
-        <!-- Jika tidak ada kategori -->
+
+        <!-- Jika Kosong -->
         <div class="col-12 text-center py-5">
             <i class="bi bi-tags text-muted" style="font-size: 4rem;"></i>
             <h4 class="text-muted mt-3">Belum ada kategori tersedia</h4>
             <p class="text-muted">Kategori akan segera ditambahkan oleh admin.</p>
         </div>
+
         @endforelse
     </div>
 </div>
 
 @push('styles')
 <style>
-    /* Style card kategori */
+
+    /* Garis kecil di bawah judul */
+    .underline {
+        width: 60px;
+        height: 4px;
+        border-radius: 10px;
+        background: #0d6efd;
+        margin-top: 5px;
+    }
+
+    /* CARD STYLE */
     .category-card {
         transition: all 0.3s ease;
-        height: 100%;
-        display: flex;
-        flex-direction: column;
+        background: #ffffff;
+        border-radius: 20px !important;
     }
 
-    {{--  .category-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
-    }  --}}
-
-    /* Gradient background untuk header */
-    .bg-gradient {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    .category-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 12px 26px rgba(0, 0, 0, 0.12);
     }
 
-    /* Icon kategori */
+    /* HEADER GRADIENT */
+    .category-header {
+        background: linear-gradient(135deg, #4e73df 0%, #6f42c1 100%);
+    }
+
+    /* ICON CATEGORY */
     .category-icon {
-        width: 60px;
-        height: 60px;
+        width: 70px;
+        height: 70px;
         border-radius: 50%;
-        background: rgba(255,255,255,0.2);
-        display: inline-flex;
-        align-items: center;
+        background: rgba(255, 255, 255, 0.18);
+        display: flex;
         justify-content: center;
+        align-items: center;
         margin: 0 auto;
+        backdrop-filter: blur(6px);
     }
 
-    /* Style untuk jumlah produk */
-    .bg-light {
-        background-color: #f8f9fa !important;
+    /* INFO CHIP */
+    .info-chip {
+        background: #f1f3f5;
+        border-radius: 30px;
+        font-size: 15px;
     }
 
-    /* Hover effect untuk tombol */
-    .btn-primary:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 8px rgba(13, 110, 253, 0.3);
+    /* HOVER BUTTON */
+    .btn-hover {
+        transition: all 0.3s ease;
+        font-weight: 600;
     }
 
-    /* Responsive adjustments */
+    .btn-hover:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 14px rgba(13, 110, 253, 0.3);
+    }
+
+    /* RESPONSIVE */
     @media (max-width: 768px) {
-        .category-card {
-            margin-bottom: 1rem;
-        }
-
         .category-icon {
-            width: 50px;
-            height: 50px;
+            width: 55px;
+            height: 55px;
         }
 
         .category-icon i {
-            font-size: 1.5rem;
+            font-size: 1.4rem;
         }
     }
+
 </style>
 @endpush
 

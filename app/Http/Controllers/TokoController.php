@@ -26,7 +26,7 @@ class TokoController extends Controller
 
     public function index()
     {
-        $tokos = Toko::with('user')->get();
+        $tokos = Toko::with('users')->get();
         return view('admin.toko', compact('tokos'));
     }
 
@@ -70,7 +70,7 @@ class TokoController extends Controller
     public function show($id)
     {
         $realId = $this->decryptId($id);
-        $toko = Toko::with(['user', 'produks'])->findOrFail($realId);
+        $toko = Toko::with(['users', 'produks'])->findOrFail($realId);
         return view('admin.toko-show', compact('toko'));
     }
 

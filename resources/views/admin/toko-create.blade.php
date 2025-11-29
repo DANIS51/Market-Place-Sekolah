@@ -40,9 +40,9 @@
                                 <label for="user_id" class="form-label fw-semibold">Pemilik Toko <span class="text-danger">*</span></label>
                                 <select class="form-select" id="user_id" name="user_id" required>
                                     <option value="">Pilih Pemilik</option>
-                                    @foreach($users as $user)
-                                        <option value="{{ $user->id }}" {{ old('user_id') == $user->id ? 'selected' : '' }}>
-                                            {{ $user->nama }} ({{ $user->email }})
+                                    @foreach($user as $users)
+                                        <option value="{{ $users->id }}" {{ old('user_id') == $users->id ? 'selected' : '' }}>
+                                            {{ $users->nama }} ({{ $users->email }})
                                         </option>
                                     @endforeach
                                 </select>

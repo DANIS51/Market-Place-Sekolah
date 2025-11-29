@@ -19,7 +19,7 @@ class Toko extends Model
         'alamat',
     ];
 
-    public function user()
+    public function users()
     {
         return $this->belongsTo(User::class);
     }

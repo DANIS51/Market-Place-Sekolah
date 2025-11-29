@@ -12,14 +12,39 @@ use Illuminate\Support\Facades\Storage;
 
 class ProdukController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $produks = Produk::with(['kategori', 'toko', 'gambar_produk'])
-            ->whereHas('toko', function($query) {
-                $query->where('user_id', auth()->id());
-            })
-            ->get();
-        return view('member.produk', compact('produks'));
+        $query = Produk::with(['kategori', 'toko', 'gambar_produk'])
+            ->whereHas('toko', function($q) {
+                $q->where('user_id', auth()->id());
+            });
+
+        // search keyword (nama_produk atau deskripsi)
+        if ($search = $request->query('search')) {
+            $query->where(function($q) use ($search) {
+                $q->where('nama_produk', 'like', "%{$search}%")
+                  ->orWhere('deskripsi', 'like', "%{$search}%");
+            });
+        }
+
+        // filter kategori
+        if ($kategori = $request->query('kategori')) {
+            $query->where('kategori_id', $kategori);
+        }
+
+        // filter toko (berguna bila user punya banyak toko)
+        if ($toko = $request->query('toko')) {
+            $query->where('toko_id', $toko);
+        }
+
+        $produks = $query->orderBy('created_at', 'desc')
+                         ->paginate(12)
+                         ->withQueryString();
+
+        $kategoris = \App\Models\Kategori::all();
+        $tokos = \App\Models\Toko::where('user_id', auth()->id())->get();
+
+        return view('member.produk', compact('produks', 'kategoris', 'tokos'));
     }
 
     // Helper: coba decrypt, fallback ke id asli (cast ke int bila numeric)
@@ -49,7 +74,7 @@ class ProdukController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nama_produk' => 'required|string|max:255',
+             'nama_produk' => 'required|string|max:255',
             'harga' => 'required|numeric|min:0',
             'deskripsi' => 'required|string',
             'kategori_id' => 'required|exists:kategoris,id',

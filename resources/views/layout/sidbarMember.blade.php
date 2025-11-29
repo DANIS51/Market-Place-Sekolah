@@ -442,7 +442,7 @@
 
         <div class="user-profile">
             @if(Auth::user()->toko && Auth::user()->toko->gambar)
-                <img src="{{ asset(Auth::user()->toko->gambar) }}" alt="Toko Avatar" class="avatar" id="userAvatar">
+                <img src="{{ asset('storage/' . Auth::user()->toko->gambar) }}" alt="Toko Avatar" class="avatar" id="userAvatar" onerror="this.src='https://i.pravatar.cc/150?img={{ Auth::user()->id % 10 + 1 }}'">
             @else
                 <img src="https://i.pravatar.cc/150?img={{ Auth::user()->id % 10 + 1 }}" alt="User Avatar" class="avatar" id="userAvatar">
             @endif
@@ -479,13 +479,7 @@
 
 
 
-                <li class="nav-item">
-                    <a href="#" class="nav-link" data-tooltip="Pengaturan">
-                        <i class="bi bi-gear"></i>
-                        <span>Pengaturan</span>
-                    </a>
-                </li>
-
+              
                 <li class="nav-item">
                     <form action="{{ route('logout') }}" method="POST" class="d-inline" id="logoutForm">
                         @csrf

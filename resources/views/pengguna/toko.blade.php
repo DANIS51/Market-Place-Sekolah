@@ -49,8 +49,7 @@
                         <span class="badge bg-success">{{ $toko->produks_count ?? 0 }} Produk</span>
 
                         <div class="text-warning small">
-                            <i class="bi bi-star-fill"></i> 4.5
-                        </div>
+                         </div>
                     </div>
 
                     <div class="mt-3">
@@ -88,7 +87,7 @@
         transition: transform 0.2s ease;
     }
 
-  
+
 
     .card-img-top {
         border-bottom: 1px solid #dee2e6;

@@ -140,8 +140,7 @@
 
                             <!-- Rating static -->
                             <div class="text-warning small">
-                                <i class="bi bi-star-fill"></i> 4.5
-                            </div>
+                             </div>
                         </div>
                     </div>
 
@@ -200,7 +199,7 @@
         min-height: 480px; /* Tinggi minimum yang lebih konsisten */
     }
 
-    
+
 
     /* Container gambar dengan tinggi tetap */
     .product-image-container {

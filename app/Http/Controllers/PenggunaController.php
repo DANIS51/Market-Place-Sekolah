@@ -4,12 +4,25 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Contracts\Encryption\DecryptException;
 use App\Models\Produk;
 use App\Models\Kategori;
 use App\Models\Toko;
 
 class PenggunaController extends Controller
 {
+    // Helper: decrypt dengan fallback
+    private function decryptId($id)
+    {
+        $id = str_replace(['_', '-'], ['/', '+'], urldecode($id));
+        try {
+            $decrypted = Crypt::decrypt($id);
+        } catch (DecryptException $e) {
+            $decrypted = $id;
+        }
+        return is_numeric($decrypted) ? (int) $decrypted : $decrypted;
+    }
+
     public function home(Request $request)
     {
         $query = Produk::with('kategori', 'toko', 'gambar_produk');
@@ -22,7 +35,7 @@ class PenggunaController extends Controller
 
         $produks = $query->take(4)->get();
         $kategoris = Kategori::withCount('produks')->take(4)->get();
-        $tokos = Toko::with('user')->withCount('produks')->take(4)->get();
+        $tokos = Toko::with('produks')->withCount('produks')->take(4)->get();
 
         return view('pengguna.home', compact('produks', 'kategoris', 'tokos'));
     }
@@ -64,53 +77,34 @@ class PenggunaController extends Controller
 
     public function kategoriShow($kategoriId)
     {
-        try {
-            $kategoriId = Crypt::decrypt($kategoriId);
-        } catch (\Exception $e) {
-            abort(404);
-        }
-        $kategori = Kategori::with('produks.toko', 'produks.gambar_produk')->findOrFail($kategoriId);
-        return view('pengguna.kategori-detail', compact('kategori'));
+        $realId = $this->decryptId($kategoriId);
+        $kategori = Kategori::with('produks.toko', 'produks.gambar_produk')
+                            ->findOrFail($realId);
+        $produks = $kategori->produks()->paginate(12);
+        return view('pengguna.kategori-show', compact('kategori', 'produks'));
     }
 
-    public function toko(Request $request)
+    public function toko()
     {
-        $query = Toko::with('user')->withCount('produks');
-
-        // Filter berdasarkan search (case-insensitive)
-        if ($request->has('search') && !empty($request->search)) {
-            $searchTerm = strtolower($request->search);
-            $query->whereRaw('LOWER(nama_toko) LIKE ?', ['%' . $searchTerm . '%']);
-        }
-
-        $tokos = $query->paginate(12);
-
+        $tokos = Toko::with('produks')->withCount('produks')->paginate(12);
         return view('pengguna.toko', compact('tokos'));
     }
 
     public function tokoShow($tokoId)
     {
-        try {
-            $tokoId = Crypt::decrypt($tokoId);
-        } catch (\Exception $e) {
-            abort(404);
-        }
-        $toko = Toko::with('user')->withCount('produks')->findOrFail($tokoId);
+        $realId = $this->decryptId($tokoId);
+        $toko = Toko::with('user')->withCount('produks')->findOrFail($realId);
         $produks = Produk::with('kategori', 'toko', 'gambar_produk')
-                        ->where('toko_id', $tokoId)
+                        ->where('toko_id', $realId)
                         ->paginate(12);
         return view('pengguna.toko-show', compact('toko', 'produks'));
     }
 
     public function produkShow($produkId)
     {
-        try {
-            $produkId = str_replace(['_', '-'], ['/', '+'], $produkId);
-            $produkId = Crypt::decrypt($produkId);
-        } catch (\Exception $e) {
-            abort(404);
-        }
-        $produk = Produk::with('kategori', 'toko', 'gambar_produk')->findOrFail($produkId);
+        $realId = $this->decryptId($produkId);
+        $produk = Produk::with('kategori', 'toko', 'gambar_produk')
+                        ->findOrFail($realId);
         return view('pengguna.produk-show', compact('produk'));
     }
 }

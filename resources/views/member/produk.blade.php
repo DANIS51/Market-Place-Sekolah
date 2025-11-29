@@ -38,21 +38,9 @@
                                 <input type="text" name="search" class="form-control border-start-0" placeholder="Cari produk..." value="{{ request('search') }}">
                             </div>
                         </div>
-                        <div class="col-md-3">
-                            <select name="kategori" class="form-select">
-                                <option value="">Semua Kategori</option>
-                                <!-- Loop kategori -->
-                            </select>
-                        </div>
-                        <div class="col-md-3">
-                            <select name="toko" class="form-select">
-                                <option value="">Semua Toko</option>
-                                <!-- Loop toko -->
-                            </select>
-                        </div>
-                        <div class="col-md-1">
-                            <button type="submit" class="btn btn-secondary w-100"><i class="bi bi-funnel"></i></button>
-                        </div>
+
+
+                        
                     </form>
 
                     <!-- Tabel -->

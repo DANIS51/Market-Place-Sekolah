@@ -120,8 +120,7 @@
 
                         <!-- Rating static -->
                         <div class="text-warning small">
-                            <i class="bi bi-star-fill"></i> 4.5
-                        </div>
+                         </div>
                     </div>
 
                     <!-- Tombol lihat detail -->

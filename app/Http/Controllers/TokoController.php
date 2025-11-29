@@ -8,9 +8,22 @@ use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Contracts\Encryption\DecryptException;
 
 class TokoController extends Controller
 {
+    // Helper: decrypt dengan fallback
+    private function decryptId($id)
+    {
+        $id = str_replace(['_', '-'], ['/', '+'], urldecode($id));
+        try {
+            $decrypted = Crypt::decrypt($id);
+        } catch (DecryptException $e) {
+            $decrypted = $id;
+        }
+        return is_numeric($decrypted) ? (int) $decrypted : $decrypted;
+    }
+
     public function index()
     {
         $tokos = Toko::with('user')->get();
@@ -19,8 +32,8 @@ class TokoController extends Controller
 
     public function create()
     {
-        $users = User::all();
-        return view('admin.toko-create', compact('users'));
+        $user = User::all();
+        return view('admin.toko-create', compact('user'));
     }
 
     public function store(Request $request)
@@ -56,37 +69,23 @@ class TokoController extends Controller
 
     public function show($id)
     {
-        try {
-            $id = str_replace(['_', '-'], ['/', '+'], $id);
-            $real_id = Crypt::decrypt($id);
-            $toko = Toko::findOrFail($real_id);
-            $toko->load('user', 'produks');
-            return view('admin.toko-show', compact('toko'));
-        } catch (\Exception $e) {
-            abort(404);
-        }
+        $realId = $this->decryptId($id);
+        $toko = Toko::with(['user', 'produks'])->findOrFail($realId);
+        return view('admin.toko-show', compact('toko'));
     }
 
     public function edit($id)
     {
-        try {
-            $real_id = Crypt::decrypt($id);
-            $toko = Toko::findOrFail($real_id);
-            $users = User::all();
-            return view('admin.toko-edit', compact('toko', 'users'));
-        } catch (\Exception $e) {
-            abort(404);
-        }
+        $realId = $this->decryptId($id);
+        $toko = Toko::findOrFail($realId);
+        $users = User::all();
+        return view('admin.toko-edit', compact('toko', 'users'));
     }
 
     public function update(Request $request, $id)
     {
-        try {
-            $real_id = Crypt::decrypt($id);
-            $toko = Toko::findOrFail($real_id);
-        } catch (\Exception $e) {
-            abort(404);
-        }
+        $realId = $this->decryptId($id);
+        $toko = Toko::findOrFail($realId);
 
         $validator = Validator::make($request->all(), [
             'nama_toko' => 'required|string|max:255',
@@ -124,13 +123,8 @@ class TokoController extends Controller
 
     public function destroy($id)
     {
-        try {
-            $id = str_replace(['_', '-'], ['/', '+'], $id);
-            $real_id = Crypt::decrypt($id);
-            $toko = Toko::findOrFail($real_id);
-        } catch (\Exception $e) {
-            abort(404);
-        }
+        $realId = $this->decryptId($id);
+        $toko = Toko::findOrFail($realId);
 
         // Check if toko has related produks
         if ($toko->produks()->count() > 0) {

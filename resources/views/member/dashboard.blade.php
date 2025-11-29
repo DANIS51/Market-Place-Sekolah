@@ -24,9 +24,7 @@
             <div class="card border-left-primary shadow">
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                     <h6 class="m-0 font-weight-bold text-primary">Informasi Toko</h6>
-                    <a href="{{ route('toko.show', $user->toko->id) }}" class="btn btn-primary btn-sm">
-                        <i class="bi bi-eye me-1"></i>Lihat Toko
-                    </a>
+
                 </div>
                 <div class="card-body">
                     <div class="row align-items-center">
@@ -59,9 +57,7 @@
                                     <span class="font-weight-bold">{{ $totalProducts }}</span>
                                 </div>
                                 <div class="col-sm-3">
-                                    <small class="text-muted">Rating</small>
-                                    <br>
-                                    <span>⭐ 4.5 (120 ulasan)</span>
+
                                 </div>
                             </div>
                         </div>
@@ -220,81 +216,18 @@
                         <a href="{{ route('produk.index') }}" class="btn btn-outline-success btn-sm">
                             <i class="bi bi-list me-2"></i>Kelola Produk
                         </a>
-                        <a href="{{ route('kategori.index') }}" class="btn btn-outline-info btn-sm">
-                            <i class="bi bi-tags me-2"></i>Kelola Kategori
-                        </a>
-                        <a href="#" class="btn btn-outline-warning btn-sm">
-                            <i class="bi bi-graph-up me-2"></i>Lihat Laporan
-                        </a>
+
+                     
                     </div>
                 </div>
             </div>
 
-            <!-- Recent Notifications -->
-            <div class="card shadow">
-                <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">Notifikasi Terbaru</h6>
-                </div>
-                <div class="card-body">
-                    <div class="notification-item mb-3 pb-3 border-bottom">
-                        <div class="d-flex">
-                            <div class="me-3">
-                                <i class="bi bi-cart-check text-success"></i>
-                            </div>
-                            <div>
-                                <small class="font-weight-bold">Pesanan Baru</small>
-                                <div class="small text-muted">Pesanan #12345 telah dibuat</div>
-                                <small class="text-muted">2 jam yang lalu</small>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="notification-item mb-3 pb-3 border-bottom">
-                        <div class="d-flex">
-                            <div class="me-3">
-                                <i class="bi bi-star text-warning"></i>
-                            </div>
-                            <div>
-                                <small class="font-weight-bold">Ulasan Baru</small>
-                                <div class="small text-muted">Produk Anda mendapat ulasan 5 bintang</div>
-                                <small class="text-muted">5 jam yang lalu</small>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="notification-item">
-                        <div class="d-flex">
-                            <div class="me-3">
-                                <i class="bi bi-exclamation-triangle text-danger"></i>
-                            </div>
-                            <div>
-                                <small class="font-weight-bold">Stok Menipis</small>
-                                <div class="small text-muted">Produk "Baju Kemeja" stok tersisa 2</div>
-                                <small class="text-muted">1 hari yang lalu</small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+
         </div>
     </div>
 
     <!-- Sales Chart Placeholder -->
-    <div class="row">
-        <div class="col-12">
-            <div class="card shadow">
-                <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">Grafik Penjualan Bulanan</h6>
-                </div>
-                <div class="card-body">
-                    <div class="chart-placeholder text-center py-5">
-                        <i class="bi bi-bar-chart text-muted fa-4x mb-3"></i>
-                        <h5 class="text-muted">Grafik Penjualan</h5>
-                        <p class="text-muted">Grafik penjualan bulanan akan ditampilkan di sini</p>
-                        <small class="text-muted">Fitur ini akan segera hadir</small>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+
 </div>
 
 <style>

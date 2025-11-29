@@ -22,15 +22,8 @@
                     <div class="col-md-6">
                         <h1 class="h2 fw-bold mb-2">{{ $toko->nama_toko }}</h1>
                         <div class="d-flex align-items-center mb-2">
-                            <div class="text-warning me-2">
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star-half"></i>
-                            </div>
-                            <small class="text-muted">(4.5) • {{ $toko->produks_count ?? 0 }} produk</small>
-                        </div>
+
+                         </div>
                         <p class="text-muted mb-2">{{ $toko->deskripsi }}</p>
                         <div class="row">
                             <div class="col-sm-6">
@@ -46,15 +39,7 @@
                         </div>
                     </div>
 
-                    <!-- Tombol Aksi -->
-                    <div class="col-md-3 text-center">
-                        <button class="btn btn-success btn-lg w-100 mb-2">
-                            <i class="bi bi-whatsapp me-2"></i> Hubungi
-                        </button>
-                        <button class="btn btn-outline-primary w-100">
-                            <i class="bi bi-heart me-2"></i> Ikuti
-                        </button>
-                    </div>
+
                 </div>
             </div>
         </div>
@@ -132,8 +117,7 @@
 
                                 <!-- Rating static -->
                                 <div class="text-warning small">
-                                    <i class="bi bi-star-fill"></i> 4.5
-                                </div>
+                                 </div>
                             </div>
                         </div>
 
@@ -178,10 +162,10 @@
             min-height: 480px; /* Tinggi minimum yang lebih konsisten */
         }
 
-        .product-card:hover {
+        {{--  .product-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
-        }
+        }  --}}
 
         /* Container gambar dengan tinggi tetap */
         .product-image-container {
@@ -205,9 +189,9 @@
         }
 
         /* Jika card dihover, gambar zoom */
-        .product-card:hover .product-image {
+        {{--  .product-card:hover .product-image {
             transform: scale(1.05);
-        }
+        }  --}}
 
         /* Box untuk produk tanpa gambar */
         .no-image {

@@ -61,21 +61,13 @@
 
                     <!-- Rating -->
                     <div class="d-flex align-items-center mb-3">
-                        <div class="text-warning me-2">
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-fill"></i>
-                            <i class="bi bi-star-half"></i>
-                        </div>
-                        <small class="text-muted">(4.5) • 120 ulasan</small>
-                    </div>
+
+                     </div>
 
                     <!-- Harga -->
                     <div class="mb-4">
                         <h2 class="text-success fw-bold mb-0">Rp {{ number_format($produk->harga, 0, ',', '.') }}</h2>
-                        <small class="text-muted">Harga belum termasuk ongkir</small>
-                    </div>
+                     </div>
 
                     <!-- Deskripsi -->
                     <div class="mb-4">
@@ -103,9 +95,7 @@
                            Bayar via WhatsApp
                         </a>
 
-                        <button class="btn btn-outline-primary">
-                            <i class="bi bi-heart me-2"></i> Simpan ke Wishlist
-                        </button>
+                         
                     </div>
                 </div>
             </div>

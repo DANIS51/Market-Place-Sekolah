@@ -1,7 +1,7 @@
 @extends('layout.navbar')
 
 @section('conten-pengguna')
- 
+
 <div class="container py-4">
 
 
@@ -66,10 +66,10 @@
         flex-direction: column;
     }
 
-    .category-card:hover {
+    {{--  .category-card:hover {
         transform: translateY(-5px);
         box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
-    }
+    }  --}}
 
     /* Gradient background untuk header */
     .bg-gradient {

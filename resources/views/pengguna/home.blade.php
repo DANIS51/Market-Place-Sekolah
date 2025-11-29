@@ -243,11 +243,7 @@
                             </small>
                         </div>
 
-                        <div class="rating">
-                            @for($i = 1; $i <= 5; $i++)
-                            <i class="bi bi-star-fill text-warning"></i>
-                            @endfor
-                        </div>
+                        
                     </div>
 
                     <div class="d-grid gap-2">

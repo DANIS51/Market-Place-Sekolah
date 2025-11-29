@@ -442,8 +442,7 @@
             </div>
 
             <div class="user-profile">
-                <img src="https://i.pravatar.cc/150?img={{ Auth::user()->id % 10 + 1 }}" alt="User Avatar" class="avatar" id="userAvatar">
-                <div class="info">
+                 <div class="info">
                     <p class="name">{{ Auth::user()->nama }}</p>
                     <p class="role">{{ Auth::user()->role == 'admin' ? 'Administrator' : 'Member' }}</p>
                 </div>
@@ -477,12 +476,7 @@
                             <span>Kategori</span>
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a href="" class="nav-link {{ Route::currentRouteName() == 'pengaturan' ? 'active' : '' }}" data-tooltip="Pengaturan">
-                            <i class="bi bi-gear"></i>
-                            <span>Pengaturan</span>
-                        </a>
-                    </li>
+                    
                     <li class="nav-item">
                         <form action="{{ route('logout') }}" method="POST" class="d-inline" id="logoutForm">
                             @csrf

@@ -225,7 +225,7 @@
 
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <!-- Navigation Links -->
-                    <ul class="navbar-nav me-auto">
+                    <ul class="navbar-nav ms-auto">
                         <li class="nav-item">
                             <a class="nav-link fw-medium {{ request()->routeIs('home') ? 'text-warning' : '' }}" href="{{ route('home') }}">
                                 <i class="bi bi-house-door me-1"></i>Beranda
